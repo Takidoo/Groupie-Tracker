@@ -1,9 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <title>Search</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groupes de Musique</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .search-bar {
+            margin: 20px auto;
+            max-width: 600px;
+            display: flex;
+            gap: 10px;
+        }
+        .search-bar input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .search-bar button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
+        .groups-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .group {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .group:last-child {
+            border-bottom: none;
+        }
+        .group h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #007BFF;
+        }
+        .group p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-    
+    <header>
+        <h1>Groupes de Musique</h1>
+    </header>
+
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Rechercher un groupe..." />
+        <button id="searchButton">Rechercher</button>
+    </div>
+
+    <div class="groups-container">
+        <!-- Exemple de groupes affichés statiquement -->
+        <div class="group">
+            <h2>Pink Floyd</h2>
+            <p>Genre : Rock progressif</p>
+        </div>
+        <div class="group">
+            <h2>Led Zeppelin</h2>
+            <p>Genre : Hard Rock</p>
+        </div>
+        <div class="group">
+            <h2>The Beatles</h2>
+            <p>Genre : Rock</p>
+        </div>
+        <div class="group">
+            <h2>Queen</h2>
+            <p>Genre : Rock classique</p>
+        </div>
+    </div>
 </body>
 </html>
