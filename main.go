@@ -22,6 +22,9 @@ type GroupInfos struct {
 	Relations    string   `json:"relations"`
 }
 
+var resp, _ = http.Get("https://groupietrackers.herokuapp.com/api/artists")
+var infos []GroupInfos
+
 func addMj(tab *[]GroupInfos) {
 	*tab = append(*tab, GroupInfos{
 		ID:           53,
@@ -37,18 +40,19 @@ func addMj(tab *[]GroupInfos) {
 }
 
 func start(w http.ResponseWriter, r *http.Request) {
-	resp, _ := http.Get("https://groupietrackers.herokuapp.com/api/artists")
-	var infos []GroupInfos
-	json.NewDecoder(resp.Body).Decode(&infos)
-	addMj(&infos)
 	if r.Method == http.MethodPost {
-		infos = searchFunc(r.FormValue("userInput"), infos)
+		gg := PageData{
+			Groups: searchFunc(r.FormValue("userInput"), infos),
+		}
+		tmpl, _ := template.ParseFiles("templates/search.html")
+		tmpl.Execute(w, gg)
+	} else {
+		gg := PageData{
+			Groups: infos,
+		}
+		tmpl, _ := template.ParseFiles("templates/search.html")
+		tmpl.Execute(w, gg)
 	}
-	gg := PageData{
-		Groups: infos,
-	}
-	tmpl, _ := template.ParseFiles("templates/search.html")
-	tmpl.Execute(w, gg)
 }
 
 func searchFunc(input string, infos []GroupInfos) []GroupInfos {
@@ -61,12 +65,7 @@ func searchFunc(input string, infos []GroupInfos) []GroupInfos {
 	return output
 }
 func infoPage(w http.ResponseWriter, r *http.Request) {
-	resp, _ := http.Get("https://groupietrackers.herokuapp.com/api/artists")
-	var infos []GroupInfos
 	json.NewDecoder(resp.Body).Decode(&infos)
-	if r.URL.Query().Get("id") == "Michael Jackson" {
-		addMj(&infos)
-	}
 	gg := PageData{
 		searchFunc(r.URL.Query().Get("id"), infos),
 	}
@@ -75,6 +74,8 @@ func infoPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	json.NewDecoder(resp.Body).Decode(&infos)
+	addMj(&infos)
 	http.HandleFunc("/", start)
 	http.HandleFunc("/info", infoPage)
 	http.ListenAndServe(":80", nil)
