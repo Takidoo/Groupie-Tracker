@@ -10,6 +10,9 @@ import (
 type PageData struct {
 	Groups []GroupInfos
 }
+type infoData struct {
+	Group GroupInfos
+}
 type GroupInfos struct {
 	ID           int      `json:"id"`
 	Image        string   `json:"image"`
@@ -45,9 +48,19 @@ func searchFunc(input string, infos []GroupInfos) []GroupInfos {
 	}
 	return output
 }
+func infoPage(w http.ResponseWriter, r *http.Request) {
+	resp, _ := http.Get("https://groupietrackers.herokuapp.com/api/artists")
+	var infos []GroupInfos
+	json.NewDecoder(resp.Body).Decode(&infos)
+	gg := PageData{
+		searchFunc(r.URL.Query().Get("id"), infos),
+	}
+	tmpl, _ := template.ParseFiles("templates/groupinfo.html")
+	tmpl.Execute(w, gg)
+}
 
 func main() {
 	http.HandleFunc("/", start)
-
+	http.HandleFunc("/info", infoPage)
 	http.ListenAndServe(":80", nil)
 }
