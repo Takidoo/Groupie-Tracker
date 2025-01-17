@@ -10,9 +10,6 @@ import (
 type PageData struct {
 	Groups []GroupInfos
 }
-type infoData struct {
-	Group GroupInfos
-}
 type GroupInfos struct {
 	ID           int      `json:"id"`
 	Image        string   `json:"image"`
@@ -25,10 +22,25 @@ type GroupInfos struct {
 	Relations    string   `json:"relations"`
 }
 
+func addMj(tab *[]GroupInfos) {
+	*tab = append(*tab, GroupInfos{
+		ID:           53,
+		Image:        "https://media.vanityfair.fr/photos/63871e8919ae25c0a47e6089/16:9/w_320%2Cc_limit/3.jpg",
+		Name:         "Michael Jackson",
+		Members:      []string{"Michael Jackson"},
+		CreationDate: 1958,
+		FirstAlbum:   "Off The Wall (les autres ça ne compte pas)",
+		Locations:    "",
+		ConcertDates: "",
+		Relations:    "",
+	})
+}
+
 func start(w http.ResponseWriter, r *http.Request) {
 	resp, _ := http.Get("https://groupietrackers.herokuapp.com/api/artists")
 	var infos []GroupInfos
 	json.NewDecoder(resp.Body).Decode(&infos)
+	addMj(&infos)
 	if r.Method == http.MethodPost {
 		infos = searchFunc(r.FormValue("userInput"), infos)
 	}
@@ -52,6 +64,9 @@ func infoPage(w http.ResponseWriter, r *http.Request) {
 	resp, _ := http.Get("https://groupietrackers.herokuapp.com/api/artists")
 	var infos []GroupInfos
 	json.NewDecoder(resp.Body).Decode(&infos)
+	if r.URL.Query().Get("id") == "Michael Jackson" {
+		addMj(&infos)
+	}
 	gg := PageData{
 		searchFunc(r.URL.Query().Get("id"), infos),
 	}
