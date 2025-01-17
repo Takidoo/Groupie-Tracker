@@ -80,28 +80,19 @@
     </header>
 
     <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Rechercher un groupe..." />
-        <button id="searchButton">Rechercher</button>
+        <form action="/" method="post">
+            <input type="text" id="searchInput" placeholder="Rechercher un groupe..." name="userInput"/>
+            <button id="searchButton" type="submit">Rechercher</button>
+        </form>
     </div>
 
     <div class="groups-container">
-        <!-- Exemple de groupes affichés statiquement -->
+        {{range .Groups}}
         <div class="group">
-            <h2>Pink Floyd</h2>
-            <p>Genre : Rock progressif</p>
+            <h2>{{.Name}}</h2>
+            <p>{{.Name}}</p>
         </div>
-        <div class="group">
-            <h2>Led Zeppelin</h2>
-            <p>Genre : Hard Rock</p>
-        </div>
-        <div class="group">
-            <h2>The Beatles</h2>
-            <p>Genre : Rock</p>
-        </div>
-        <div class="group">
-            <h2>Queen</h2>
-            <p>Genre : Rock classique</p>
-        </div>
+        {{end}}
     </div>
 </body>
 </html>
