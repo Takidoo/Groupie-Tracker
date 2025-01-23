@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"html/template"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
-type PageData struct {
+type SearchPageData struct {
 	Groups []GroupInfos
 }
 type GroupInfos struct {
@@ -23,18 +24,18 @@ type GroupInfos struct {
 }
 
 var ArtistBody *http.Response
-var Err error
+var ArtistErr error
 var Infos []GroupInfos
 
 func SearchPage(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
-		data := PageData{
+		data := SearchPageData{
 			Groups: SearchFunc(r.FormValue("userInput"), Infos),
 		}
 		tmpl, _ := template.ParseFiles("templates/search.html")
 		tmpl.Execute(w, data)
 	} else {
-		data := PageData{
+		data := SearchPageData{
 			Groups: Infos,
 		}
 		tmpl, _ := template.ParseFiles("templates/search.html")
@@ -45,24 +46,33 @@ func SearchPage(w http.ResponseWriter, r *http.Request) {
 func SearchFunc(input string, infos []GroupInfos) []GroupInfos {
 	var output []GroupInfos
 	for i := 0; i < len(infos); i++ {
-		if strings.Contains(infos[i].Name, input) {
+		if strings.Contains(strings.ToLower(infos[i].Name), strings.ToLower(input)) {
 			output = append(output, infos[i])
 		}
 	}
 	return output
 }
 func InfoPage(w http.ResponseWriter, r *http.Request) {
-	json.NewDecoder(ArtistBody.Body).Decode(&Infos)
-	data := PageData{
-		SearchFunc(r.URL.Query().Get("id"), Infos),
+	var groupId, _ = strconv.Atoi(r.URL.Query().Get("id"))
+	groupId += -1
+	data := GroupInfos{
+		ID:           Infos[groupId].ID,
+		Image:        Infos[groupId].Image,
+		Name:         Infos[groupId].Name,
+		Members:      Infos[groupId].Members,
+		CreationDate: Infos[groupId].CreationDate,
+		FirstAlbum:   Infos[groupId].FirstAlbum,
+		Locations:    Infos[groupId].Locations,
+		ConcertDates: Infos[groupId].ConcertDates,
+		Relations:    Infos[groupId].Relations,
 	}
 	tmpl, _ := template.ParseFiles("templates/groupinfo.html")
 	tmpl.Execute(w, data)
 }
 
 func RsrcInit() bool {
-	ArtistBody, Err = http.Get("https://groupietrackers.herokuapp.com/api/artists")
-	if Err != nil {
+	ArtistBody, ArtistErr = http.Get("https://groupietrackers.herokuapp.com/api/artists")
+	if ArtistErr != nil {
 		print("Impossible de charger l'API 'Artiste'")
 		return false
 	}
