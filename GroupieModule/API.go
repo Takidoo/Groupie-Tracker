@@ -10,6 +10,9 @@ func FetchAllArtists(str string, grps *[]GroupInfos) bool {
 	if err != nil {
 		return false
 	}
-	json.NewDecoder(resp.Body).Decode(&grps)
+	err = json.NewDecoder(resp.Body).Decode(&grps)
+	if err != nil {
+		return false
+	}
 	return true
 }
