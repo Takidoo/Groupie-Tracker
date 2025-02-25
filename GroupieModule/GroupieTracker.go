@@ -23,6 +23,7 @@ type GroupInfos struct {
 	Locations    string   `json:"locations"`
 	ConcertDates string   `json:"concertDates"`
 	Relations    string   `json:"relations"`
+	Concerts     []string
 }
 
 var Artists []GroupInfos
@@ -113,6 +114,8 @@ func InfoPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	groupId += -1
+	var concertsData, _ = ArtistConcertData(Artists[groupId].Locations, Artists[groupId].Relations)
+	print(concertsData[0])
 	data := GroupInfos{
 		ID:           Artists[groupId].ID,
 		Image:        Artists[groupId].Image,
@@ -123,6 +126,7 @@ func InfoPage(w http.ResponseWriter, r *http.Request) {
 		Locations:    Artists[groupId].Locations,
 		ConcertDates: Artists[groupId].ConcertDates,
 		Relations:    Artists[groupId].Relations,
+		Concerts:     concertsData,
 	}
 	tmpl, _ := template.ParseFiles("templates/groupinfo.html")
 	tmpl.Execute(w, data)

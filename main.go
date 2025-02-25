@@ -6,7 +6,6 @@ import (
 )
 
 func main() {
-
 	if !GroupieModule.RsrcInit() {
 		print("\nImpossible de démarrer le serveur web car les composants requis non pas pu être initialisés, voir erreur si dessus.")
 	} else {
