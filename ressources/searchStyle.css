@@ -9,56 +9,22 @@ body {
     overflow: hidden;
 }
 
-#background {
-    max-width: 4896px;
-    width: 100Vw;/*100% de la largeur de la fenetre*/
-    height: 50vh;/*positionner à 50% de la hauteur de l'image pour centrer verticalement*/
-}
-
 header {
+    display: flex;
     position: relative;
-    background-image: url(ressources/background-original.jpg);
+    flex-direction: column;
     background-size: 100% auto;/*l'image s'adapte à la largeur du header et automatiquement en hauteur*/
     background-repeat: no-repeat;
     background-position:center;
-    height: 30vh;/*le header occupe 30% de la fenetre*/
+    height: 35vh;/*le header occupe 35% de la fenetre*/
 }
 
-header picture{
-    display: flex;
-    position: absolute;
-    color: #fff;
-    object-fit: cover;/*couvre entièrement l'écran*/
+header img{
+    position: absolute;/*l'image est positionnée par rapport au header et prend toute la place*/
+    width: 100%;
+    height: 100%;/*assure que picture prends la hauteur du header*/
+    object-fit: cover;/*l'image s'adapte à la taille du header*/
     object-position: center;
-    max-height: fit-content;/*prend la hauteur de l'image*/
-}
-
-@media screen and (max-width: 2400px) {/*si la largeur de l'écran est inférieure à 2400px alors on prend l'image originel et le header prend 30% de la hauteur*/
-    header {
-        background-image: url(ressources/background-original.jpg);
-        height: 30vh;
-    } 
-}
-
-@media screen and (max-width: 1800px) {/*si la largeur de l'écran est inférieure à 1800px alors on prend l'image large et le header prend 25% de la hauteur*/
-    header {
-        background-image: url(ressources/background-large.jpg);
-        height: 25vh;
-    }
-}
-
-@media screen and (max-width: 1200px) {/*si la largeur de l'écran est inférieure à 1200px alors on prend l'image medium et le header prend 20% de la hauteur*/
-    header {
-        background-image: url(ressources/background-medium.jpg);
-        height: 20vh;
-    }
-}
-
-@media screen and (max-width: 600px) { /*si la largeur de l'écran est inférieure à 600px alors on prend l'image small et le header prend 10% de la hauteur*/
-    header {
-        background-image: url(ressources/background-small.jpg);
-        height: 10vh;
-    }
 }
 
 header h1 {
@@ -67,7 +33,7 @@ header h1 {
     margin: 0;
     padding-top: 4vh;/*positionné à 4% de la hauteur de l'image*/
     justify-content: center;
-    font-size: 10vw;/*20% proportionnellement à la taille de l'écran*/
+    font-size: 10vw;/*10% proportionnellement à la taille de l'écran*/
     text-shadow:5px 5px 2px rgba(0, 0, 0, 0.5);/*contour du texte*//*horizontale, verticale, floutage, couleur*/
     max-width: 100%;/*évite de débordement*/
     color: #ffd900;
@@ -77,28 +43,28 @@ header h1 {
     display: flex;
     position: relative;
     justify-content: center;
-    margin: 2% auto 0%;
-    max-width: 600px;
-    gap: 30px;
-    /*padding-bottom: 3%;*/
+    margin: 2% auto 0%;/*2% en haut, 0% en bas et auto sur les cotés*/
+    max-width: 100%;
+    justify-content: space-evenly;
 }
 
-.search-bar input[type="text"] {
+.search-bar [type="text"] {
     flex: 1;
-    padding: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #53005d;
-    border: 2px solid #ffd900;
-    border-radius: 5px;
-    box-sizing: border-box;
+    padding: 1.5vh 2vw;
+    font-size: 1.5vw;
+    text-align: center;
+    color: #ffd900 !important;
+    background-color:#53005d !important;
+    border: 2px solid #ffd900 !important;
+    border-radius: 5px !important;
+    box-sizing: border-box  !important;
 }
 
 .search-bar button {
     flex: 2;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #ffd900;
+    padding: 1.8vh 2vw;
+    font-size: 1.3vw;
+    color: #ffd900 !important;
     background-color:#53005d;
     border: 2px solid #ffd900;
     border-radius: 5px;
@@ -107,20 +73,23 @@ header h1 {
 }
 
 .search-bar button:hover {
-    background-color: #ffd900;
-    font-size: 1rem;
-    color: #000;
+    background-color: #ffd900 !important;
+    color: #000 !important;
 }
 
 .search-bar button:active {
-    background-color: #e602ff;
+    background-color: #e602ff !important;
+}
+
+.search-bar *::selection {
+    background-color: #ffd900 !important;/*change la couleur de selection des items de la search-bar*/
 }
 
 .search-bar select {
     flex: 3;
-    padding: 10px;
-    font-size: 16px;
-    color: #ffd900;
+    padding: 1.5vh 2vw;
+    font-size: 1.5vw;
+    color: #ffd900 !important;
     background-color:#53005d;
     border: 2px solid #ffd900;
     border-radius: 5px;
@@ -133,7 +102,7 @@ header h1 {
     padding-top: 5%;
     padding-bottom: 10%;
     justify-content: center;
-    gap: 30px;
+    gap: 5vw;
     height: calc(100vh - 160px);/* Ajuste en fonction de l'espace pris par le header */
     background: #250042;
     box-sizing: border-box;
@@ -162,15 +131,16 @@ header h1 {
     box-shadow: 0 2px 5px rgb(255, 255, 255);
 }
 
+.item-group img:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+}
+
 .item-group h4 {
     text-align: center;
     padding-top:7%;
     margin: 5px 0 0;
-    font-size: 18px;
+    font-size: 2vw;
     font-weight: bold;
     color: #fb2bff;
-}
-
-a {
-    text-decoration: none;/*retire le surlignement automatique*/
 }
