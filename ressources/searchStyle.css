@@ -31,9 +31,9 @@ header h1 {
     display: flex;
     position:relative;
     margin: 0;
-    padding-top: 4vh;/*positionné à 4% de la hauteur de l'image*/
+    font-size:8vw;
     justify-content: center;
-    font-size: 10vw;/*10% proportionnellement à la taille de l'écran*/
+    font-size: 50vw auto;/*taille de la police de caractère*/
     text-shadow:5px 5px 2px rgba(0, 0, 0, 0.5);/*contour du texte*//*horizontale, verticale, floutage, couleur*/
     max-width: 100%;/*évite de débordement*/
     color: #ffd900;
@@ -51,7 +51,7 @@ header h1 {
 .search-bar [type="text"] {
     flex: 1;
     padding: 1.5vh 2vw;
-    font-size: 1.5vw;
+    font-size: 1.5vw 1.5vh;
     text-align: center;
     color: #ffd900 !important;
     background-color:#53005d !important;
@@ -62,8 +62,8 @@ header h1 {
 
 .search-bar button {
     flex: 2;
-    padding: 1.8vh 2vw;
-    font-size: 1.3vw;
+    padding: 1.5vh 2vw;
+    font-size: 1.5vw 1.5vh;
     color: #ffd900 !important;
     background-color:#53005d;
     border: 2px solid #ffd900;
@@ -88,7 +88,7 @@ header h1 {
 .search-bar select {
     flex: 3;
     padding: 1.5vh 2vw;
-    font-size: 1.5vw;
+    font-size: 1.5vw 1.5vh;
     color: #ffd900 !important;
     background-color:#53005d;
     border: 2px solid #ffd900;
