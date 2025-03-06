@@ -1,0 +1,124 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+global-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+a {
+    text-align: center;
+    text-decoration: none;
+}
+header {
+    background-color: #007BFF;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+.search-bar {
+    margin: 20px auto;
+    max-width: 600px;
+    display: flex;
+    gap: 10px;
+}
+.search-bar input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.search-bar button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+.search-bar button:hover {
+    background-color: #0056b3;
+    font-size: 1rem;
+}
+.groups-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /*responsive: les colonnes s'adapte automatiquement à l'espace disponible */
+    gap: 30px;
+    grid-auto-flow: column;
+    width: 100%;
+    height: calc(100vh - 160px);/* Ajuste en fonction de l'espace pris par le header */
+    background: white;
+    box-sizing: border-box;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+}
+
+.item-group {
+    width: 150px;
+    display: flex;
+    flex-flow:column wrap;
+    justify-content: center;
+    text-align: center;
+}
+.item-group img{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    max-width: 100%;
+    max-height: 100vh;
+    object-fit: cover;
+    border-radius: 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.item-group h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #007BFF;
+}
+.item-group p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #555;
+}
+/*.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}*/
+.close-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.close-btn:hover {
+    background-color: #0056b3;
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Groupie Tracker</title>
+    <link href="ressources/searchStyle.css" rel="stylesheet">
+</head>
+<body>
+    <header> 
+        <img src="ressources/background-original.jpg" alt="background" id="background">
+        <h1>Groupie Tracker</h1>
+        <div class="search-bar">
+            <form action="/" method="post" id="searchForm">         
+                <input type="text" placeholder="search a group..." name="userInput" value=""/>
+                <button type="submit">Search</button>
+                <select name="searchType">
+                    <option value="1">Name</option>
+                    <option value="2">First Album Name</option>
+                    <option value="3">Creation Date</option>
+                    <option value="4">Members</option>
+                </select>
+            </form>
+        </div>
+    </header>
+    <div class="groups-container">
+    {{range .Groups}}
+        <div class="item-group">
+            <a href="/info?id={{.ID}}"><img src="{{.Image}}" alt="Group Picture"></a>
+            <h4>{{.Name}}</h4>
+        </div>
+    {{end}}
+    </div>
+</body>
+</html>
