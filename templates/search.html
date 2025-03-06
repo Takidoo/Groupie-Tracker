@@ -6,17 +6,11 @@
 </head>
 <body>
     <header> 
-        <picture>
-            <source media="(max-width:4896px)" srcset="ressources/background-original.jpg">
-            <source media="(max-width:2000px)" srcset="ressources/background-large.jpg">
-            <source media="(max-width:1500px)" srcset="ressources/background-medium.jpg">
-            <source media="(max-width:1000px)" srcset="ressources/background-small.jpg">
-                <img src="ressources/background-original.png" alt="background" id="background">
-        </picture>
+        <img src="ressources/background-original.jpg" alt="background" id="background">
         <h1>Groupie Tracker</h1>
         <div class="search-bar">
-            <form action="/" method="post" id="searchForm">           
-                <input type="text" placeholder="search a group..." name="userInput"/>
+            <form action="/" method="post" id="searchForm">         
+                <input type="text" placeholder="search a group..." name="userInput" value=""/>
                 <button type="submit">Search</button>
                 <select name="searchType">
                     <option value="1">Name</option>
@@ -30,8 +24,8 @@
     <div class="groups-container">
     {{range .Groups}}
         <div class="item-group">
-            <img src="{{.Image}}" alt="Group Picture">
-            <a href="/info?id={{.ID}}"><h4>{{.Name}}</h4></a>
+            <a href="/info?id={{.ID}}"><img src="{{.Image}}" alt="Group Picture"></a>
+            <h4>{{.Name}}</h4>
         </div>
     {{end}}
     </div>
