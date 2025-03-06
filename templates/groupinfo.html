@@ -1,172 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head>a
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{.Name}}</title>
-</head>
-<body>
+    <title>Groupie Tracker - Artist Profile</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* Basic reset for margins and padding */
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
+            box-sizing: border-box;
         }
-        a {
-            text-decoration: none;
-        }
-        img {
-            border-color: black;
-            border: solid;
-            border-radius: 10px;
-        }
-        header {
-            background-color: #007BFF;
+
+        body {
+            font-family: 'Copper Black', sans-serif; /* Using Copper Black font */
+            background: linear-gradient(to bottom right, #2E1A47, #5A2A6B); /* Gradient with two shades of purple */
             color: white;
             padding: 20px;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .search-bar {
-            margin: 20px auto;
-            max-width: 600px;
             display: flex;
-            gap: 10px;
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Center content vertically */
+            height: 100vh; /* Full height */
         }
-        .search-bar input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .search-bar button {
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            background-color: #007BFF;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .search-bar button:hover {
-            background-color: #0056b3;
-        }
-        .groups-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 10px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .group {
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-        }
-        .group:last-child {
-            border-bottom: none;
-        }
-        .group h2 {
-            margin: 0;
-            font-size: 18px;
-            color: #007BFF;
-        }
-        .group p {
-            margin: 5px 0 0;
-            font-size: 14px;
-            color: #555;
-        }
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+
+        /* Main container for the whole page */
+        .container {
+            max-width: 1200px;
             width: 100%;
-            height: 100%;
-            backdrop-filter: blur(10px);
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 10;
-        }
-
-        /* Div centrée */
-        .modal {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* Centrer exactement */
-            background-color: white;
             padding: 20px;
-            border-radius: 8px; /* Coins arrondis */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre portée */
-            z-index: 20; /* Par-dessus l'overlay */
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Bouton pour fermer */
-        .close-btn {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 15px;
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
+        /* Artist name */
+        .artist-name {
+            font-size: 4em;
+            font-weight: bold;
+            color: #F2D900; /* Yellow color for the artist name */
+            margin-top: 40px;
         }
 
-        .close-btn:hover {
-            background-color: #0056b3;
+        /* Group section with artist photo, member list, first album, and concert dates */
+        .group-section {
+            display: flex;
+            flex-direction: column; /* Stack all items vertically */
+            align-items: center; /* Center everything horizontally */
+            justify-content: center;
+            margin-top: 50px;
+            background-color: #3F1C63; /* Slightly lighter purple */
+            padding: 40px;
+            border-radius: 10px;
+            width: 80%;
+            text-align: center; /* Center align the content */
         }
+
+        /* Artist picture - Round image */
+        .artist-picture {
+            width: 200px; /* Reduced size */
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%; /* Make the image round */
+            border: 6px solid #F2D900; /* Golden yellow border */
+            margin-right: 30px; /* Space between the image and group members */
+        }
+
+        /* Group members list */
+        .members-list {
+            color: #F2D900;
+            text-align: left; /* Align text to the left for better readability */
+            margin-top: 20px;
+        }
+
+        .members-list h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .members-list ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .members-list li {
+            font-size: 1.3em;
+            margin: 10px 0;
+        }
+
+        /* First Album Section */
+        .first-album {
+            font-size: 1.5em;
+            color: #F2D900;
+            margin-top: 20px;
+        }
+
+        /* Concert Dates Section */
+        .concert-dates {
+            font-size: 1.2em;
+            color: #F2D900;
+            margin-top: 20px;
+        }
+
     </style>
-    <header> 
-        <h1><a href="/">{{.Name}}</a></h1>
-    </header>
-    
-    <div class="groups-container" id="groups-container">
-    
-        <div class="group">
-            <img src="{{.Image}}" alt="Group Image">
-            <h2>Nom du Groupe: {{.Name}}</h2>
-            <p><strong>Date de création:</strong> {{.CreationDate}}</p>
-            <p><strong>Premier album:</strong> {{.FirstAlbum}}</p>
-            <a onclick="showModal()">Concert</a>
-            <p><strong>Membres:</strong></p>
-            <ul>
-                {{range .Members}}
-                    <li>{{.}}</li>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Artist Name -->
+        <div class="artist-name">
+            <!-- Replace with the artist's name -->
+            {{.Name}}
+        </div>
+
+        <!-- Group Section: Artist picture, members, first album, and concert dates -->
+        <div class="group-section">
+            <!-- Artist Picture: Replace src with the artist's photo -->
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <img src="{{.Image}}" alt="Artist Photo" class="artist-picture">
+
+                <div class="members-list">
+                    <h3>Group Members:</h3>
+                    <ul>
+                        <!-- Replace these list items with actual group members -->
+                        {{range .Members}}
+                            <p>{{.}}</p>
+                        {{end}}
+                        <!-- Add more members as needed -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- First Album Name -->
+            <div class="first-album">
+                <!-- Replace with the name of the first album -->
+                Date du premier album : {{.FirstAlbum}}
+            </div>
+
+            <!-- Concert Dates Section -->
+            <div class="concert-dates">
+                <h4>Concert Dates:</h4>
+                {{range .Concerts}}
+                    <p><a href="https://www.google.fr/maps/place/{{.ConcertPlace}}">{{.ConcertPlace}}</a> : {{.ConcertDate}}</p>
                 {{end}}
-            </ul>
+                <!-- Add more concert dates as needed -->
+            </div>
         </div>
-        <div class="overlay"></div>
-        <div class="modal">
-            <h2>Fenêtre au milieu</h2>
-            {{range .Concerts}}
-                <p>{{.}}</p>
-            {{end}}
-            <button class="close-btn" onclick="closeModal()">Fermer</button>
-            <script>
-                function closeModal() {
-                    document.querySelector('.overlay').style.display = 'none';
-                    document.querySelector('.modal').style.display = 'none';
-                }
-                function showModal() {
-                    document.querySelector('.overlay').style.display = 'block';
-                    document.querySelector('.modal').style.display = 'block';
-                }
-            </script>
-        </div>
-    
-    
     </div>
+
 </body>
 </html>

@@ -1,106 +1,39 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Groupes de Musique</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
-        }
-        header {
-            background-color: #007BFF;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .search-bar {
-            margin: 20px auto;
-            max-width: 600px;
-            display: flex;
-            gap: 10px;
-        }
-        .search-bar input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .search-bar button {
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            background-color: #007BFF;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .search-bar button:hover {
-            background-color: #0056b3;
-        }
-        .groups-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 10px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .group {
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-        }
-        .group:last-child {
-            border-bottom: none;
-        }
-        .group h2 {
-            margin: 0;
-            font-size: 18px;
-            color: #007BFF;
-        }
-        .group p {
-            margin: 5px 0 0;
-            font-size: 14px;
-            color: #555;
-        }
-        a {
-            text-decoration: none;
-        }
-    </style>
+    <title>Groupie Tracker</title>
+    <link href="ressources/searchStyle.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>Groupes de Musique</h1>
-    </header>
-
-    <div class="search-bar">
-        <form action="/" method="post" id="searchForm">           
-            <input type="text" id="searchInput" placeholder="Rechercher un groupe..." name="userInput"/>
-            <button id="searchButton" type="submit">Rechercher</button>
-            <select form="searchForm" name="searchType">
-                <option value="1">Name</option>
-                <option value="2">First Album Name</option>
-                <option value="3">Creation Date</option>
-                <option value="4">Members</option>
-            </select>
-        </form>
-    </div>
-    <div class="groups-container">
-        {{range .Groups}}
-        <div class="group">
-            <h2><a href="/info?id={{.ID}}">{{.Name}}</a></h2>
-            <p>{{.Name}}</p>
+    <header> 
+        <picture>
+            <source media="(max-width:4896px)" srcset="ressources/background-original.jpg">
+            <source media="(max-width:2000px)" srcset="ressources/background-large.jpg">
+            <source media="(max-width:1500px)" srcset="ressources/background-medium.jpg">
+            <source media="(max-width:1000px)" srcset="ressources/background-small.jpg">
+                <img src="ressources/background-original.png" alt="background" id="background">
+        </picture>
+        <h1>Groupie Tracker</h1>
+        <div class="search-bar">
+            <form action="/" method="post" id="searchForm">           
+                <input type="text" placeholder="search a group..." name="userInput"/>
+                <button type="submit">Search</button>
+                <select name="searchType">
+                    <option value="1">Name</option>
+                    <option value="2">First Album Name</option>
+                    <option value="3">Creation Date</option>
+                    <option value="4">Members</option>
+                </select>
+            </form>
         </div>
-        {{end}}
+    </header>
+    <div class="groups-container">
+    {{range .Groups}}
+        <div class="item-group">
+            <img src="{{.Image}}" alt="Group Picture">
+            <a href="/info?id={{.ID}}"><h4>{{.Name}}</h4></a>
+        </div>
+    {{end}}
     </div>
 </body>
 </html>
