@@ -1,9 +1,100 @@
-body {
-    display:grid;
-    grid-template-rows: auto 1fr;/*le header prend l'espace qu'il lui faut et group-contaner prend tout l'espace restant*/
-    height: 100vh;/*prend toute la hauteur de l'écran*/
+* {
     margin: 0;
     padding: 0;
+}
+
+/*media-queries afin d'adapter le layout en fonction de la taille d'écran*/
+@media (max-width: 600px){/*taille pour écran mobile entre 320px(comme definit dans le body) et 600px*/
+    body{
+        overflow-y: auto;/*permet un défilement*/
+    }
+    header{
+        padding-bottom: 4%;
+    }
+    header h1{
+        font-size: clamp(1.8rem, 6vw, 3rem);
+        text-align: center;/*force à centrer le titre*/
+    }
+    .search-bar{
+        width: 95%;
+        gap: 6px;
+    }
+    .search-bar [type="text"]{
+        min-width: 100px;
+    }
+    .search-bar button{
+        min-width: 60px;
+        padding: 0.2rem 5px;/*réduction du padding*/
+    }
+    .search-bar select{
+        min-width: 70px;
+    }
+    .groups-container{
+        flex-direction: column;
+        padding: 5% 0%;
+        gap: 3vw;
+    }
+    .item-group{
+        width: 80%;/*prend un espace plus adapté pour les écrans mobiles*/
+    }
+    .item-group img{
+        border-radius: 15px;
+    }
+    .item-group h4{
+        font-size: clamp(1rem, 5vw, 1.8rem);
+    }
+}
+@media (min-width:600px) and (max-width: 1024px){/*taille de tablette*/
+    header h1{
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+    }
+    .search-bar{
+        width: 85%;
+    }
+    .search-bar [type="text"]{
+        min-width: 150px;
+    }
+    .groups-container{
+        padding: 3% 0%;
+        gap: 4vw;
+    }
+    .item-group{
+        width: 25%;
+    }
+    .item-group h4{
+        font-size: clamp(1.2rem, 3vw, 2rem);
+    }
+}
+@media (min-width: 1024px){/*taille plus grand qu'une tablette*/
+    header h1{
+        font-size: clamp(3rem, 4vw, 4rem);
+    }
+    .search-bar{
+        width: clamp(500px, 60%, 800px);/*60 de largeur d'écran pour ne pas etre trop large*/
+    }
+    .search-bar [type="text"]{
+        min-width: 200px;
+    }
+    .groups-container{
+        padding: 2% 0%;
+        gap: 3vw;/*pour bien espacer les éléments*/
+    }
+    .item-group{
+        width: 20%;
+    }
+    .item-group h4{
+        font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+    }
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    min-height: 100vh;/*prend toute la hauteur de l'écran sans déborder*/
+    max-width: 1920px;/*évite un affichage trop large sur grand écran*/
+    min-width: 320px;/*largeur minimale pour un affichage standard mobile*/
+    margin: 0 auto;/*centre le contenu horizontalement pour les écrans larges*/
     background-color:#000;
     font-family: Arial, sans-serif;
     overflow: hidden;
@@ -13,10 +104,11 @@ header {
     display: flex;
     position: relative;
     flex-direction: column;
+    align-items: center;/*centre le contenu verticalement*/
     background-size: 100% auto;/*l'image s'adapte à la largeur du header et automatiquement en hauteur*/
     background-repeat: no-repeat;
     background-position:center;
-    height: 35vh;/*le header occupe 35% de la fenetre*/
+    padding-bottom: 2%;
 }
 
 header img{
@@ -25,15 +117,15 @@ header img{
     height: 100%;/*assure que picture prends la hauteur du header*/
     object-fit: cover;/*l'image s'adapte à la taille du header*/
     object-position: center;
+    filter: brightness(0.5);/*assombrit l'image*/
 }
 
 header h1 {
     display: flex;
     position:relative;
     margin: 0;
-    font-size:8vw;
+    font-size: clamp(3rem, 8vw, 6rem);
     justify-content: center;
-    font-size: 50vw auto;/*taille de la police de caractère*/
     text-shadow:5px 5px 2px rgba(0, 0, 0, 0.5);/*contour du texte*//*horizontale, verticale, floutage, couleur*/
     max-width: 100%;/*évite de débordement*/
     color: #ffd900;
@@ -41,35 +133,47 @@ header h1 {
 
 .search-bar {
     display: flex;
-    position: relative;
+    flex-wrap: nowrap;
+    align-items: center;
     justify-content: center;
+    position: relative;
     margin: 2% auto 0%;/*2% en haut, 0% en bas et auto sur les cotés*/
-    max-width: 100%;
-    justify-content: space-evenly;
+    width: clamp(280px, 80%, 800px);
+    gap: 10px;
+    overflow: visible;
 }
 
-.search-bar [type="text"] {
-    flex: 1;
-    padding: 1.5vh 2vw;
-    font-size: 1.5vw 1.5vh;
-    text-align: center;
-    color: #ffd900 !important;
+.search-bar [type="text"], 
+.search-bar button, 
+.search-bar select {
+    padding: 0.4rem;
+    font-size: clamp(0.8rem, 2vw, 1rem);
     background-color:#53005d !important;
     border: 2px solid #ffd900 !important;
     border-radius: 5px !important;
-    box-sizing: border-box  !important;
+    box-sizing: border-box;
+    height: 2.5rem;/*pour que tous les éléments de la barre de recherche est la meme taille*/
+}
+
+.search-bar select{
+    flex-shrink: 0;/*empeche une trop grosse réduction */
+    width: clamp(80px, 15%, 120px);
+    white-space: nowrap;
+}
+
+.search-bar [type="text"] {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: clamp(120px, 30%, 400px);
+    max-width: 100%;
 }
 
 .search-bar button {
-    flex: 2;
-    padding: 1.5vh 2vw;
-    font-size: 1.5vw 1.5vh;
-    color: #ffd900 !important;
-    background-color:#53005d;
-    border: 2px solid #ffd900;
-    border-radius: 5px;
     cursor: pointer;
-    box-sizing: border-box;
+    flex-shrink: 0;/*empeche le bouton de trop se réduire*/
+    width: clamp(60px, 15%, 100px);/*adapte la largeur*/
+    padding: 0.2rem 10px;
+    white-space: nowrap;/*empeche le retour à la ligne*/
 }
 
 .search-bar button:hover {
@@ -77,70 +181,49 @@ header h1 {
     color: #000 !important;
 }
 
-.search-bar button:active {
-    background-color: #e602ff !important;
-}
-
-.search-bar *::selection {
-    background-color: #ffd900 !important;/*change la couleur de selection des items de la search-bar*/
-}
-
-.search-bar select {
-    flex: 3;
-    padding: 1.5vh 2vw;
-    font-size: 1.5vw 1.5vh;
-    color: #ffd900 !important;
-    background-color:#53005d;
-    border: 2px solid #ffd900;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
 .groups-container {
+    flex: 1;
     display: flex;
-    flex-flow: row wrap;
-    padding-top: 5%;
-    padding-bottom: 10%;
+    flex-wrap: wrap;
     justify-content: center;
+    height: auto;
+    padding: 2% 0;
     gap: 5vw;
-    height: calc(100vh - 160px);/* Ajuste en fonction de l'espace pris par le header */
     background: #250042;
-    box-sizing: border-box;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgb(255, 255, 255);
     overflow: auto;/*ajoute un défilement si necessaire*/
 }
 
 .item-group {
-    width: 13%;
+    width: clamp(80px, 10%, 180px);
     display: flex;
-    flex-flow:column wrap;
-    justify-content: center;
+    flex-direction: column;
+    align-items: space-between;
     text-align: center;
-    padding-bottom:2%;
+    padding-bottom: 2%;
 }
 
 .item-group img{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
     max-width: 100%;
-    max-height: 100vh;
-    object-fit: cover;
+    height: auto;/*empeche la déformation des images*/
+    width: clamp(7rem, 15vw, 25rem);
+    object-fit: cover;/*force l'image à prendre l'espace de son conteneur sans déformation*/
     border-radius: 30px;
     box-shadow: 0 2px 5px rgb(255, 255, 255);
+    transition: transform 0.3s ease-in-out;/*permet une transition de reduction ou agrandissement fluide autant au depart qu'à la destination*/
 }
 
 .item-group img:hover {
     transform: scale(1.05);
-    transition: transform 0.3s ease-in-out;
 }
 
 .item-group h4 {
-    text-align: center;
     padding-top:7%;
-    margin: 5px 0 0;
-    font-size: 2vw;
+    font-size: clamp(0.5rem, 1.5vw, 1rem);
     font-weight: bold;
     color: #fb2bff;
+}
+p{
+    font-size: clamp(0.7rem, 1.5vw, 1rem);
 }

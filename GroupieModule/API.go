@@ -27,33 +27,34 @@ func FetchAllArtists(str string, grps *[]GroupInfos) bool {
 	return true
 }
 
-func ArtistConcertData(locURL string, relURL string) ([]string, bool) {
+func ArtistConcertData(locURL string, relURL string) ([]string, []string) {
 	var resp, err = http.Get(locURL)
 	if err != nil {
-		return nil, false
+		return nil, nil
 	}
 
 	var loc Locations
 	err = json.NewDecoder(resp.Body).Decode(&loc)
 	if err != nil {
-		return nil, false
+		return nil, nil
 	}
-	print("ID : ", loc.ID)
 
 	resp, err = http.Get(relURL)
 	if err != nil {
-		return nil, false
+		return nil, nil
 	}
 
 	var rel Concerts
 	err = json.NewDecoder(resp.Body).Decode(&rel)
 	if err != nil {
-		return nil, false
+		return nil, nil
 	}
 
-	var sortedConcertList []string
+	var sortedConcertPlacesList []string
+	var sortedConcertDatesList []string
 	for i := 0; i < len(loc.Locations); i++ {
-		sortedConcertList = append(sortedConcertList, loc.Locations[i]+" : "+rel.Infos[loc.Locations[i]][0])
+		sortedConcertPlacesList = append(sortedConcertPlacesList, loc.Locations[i])
+		sortedConcertDatesList = append(sortedConcertDatesList, rel.Infos[loc.Locations[i]][0])
 	}
-	return sortedConcertList, true
+	return sortedConcertPlacesList, sortedConcertDatesList
 }

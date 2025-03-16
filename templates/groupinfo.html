@@ -3,47 +3,42 @@
 <head>
     <title>{{.Name}}</title>
     <link href="ressources/groupStyle.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
-    <div class="global-container">
-        <header> 
-            <h1><a href="/">{{.Name}}</a></h1>
-        </header>
+    <header> 
+        <h1>{{.Name}}</h1>
+        <button><a href="/"><h3>Back to groups</h3></a></button>
+    </header>
     
-        <div class="groups-container">
-            <div class="item-group">
-                <img src="{{.Image}}" alt="Group Image">
-                <h2>Nom du Groupe: {{.Name}}</h2>
-                <p><strong>Date de création:</strong> {{.CreationDate}}</p>
-                <p><strong>Premier album:</strong> {{.FirstAlbum}}</p>
-                <a onclick="showModal()">Concert</a>
-                <p><strong>Membres:</strong></p>
+    <main id="groups-container">
+        <div class="group-generalDescription">
+            <img src="{{.Image}}" alt="Group Picture">
+            <div class="group-detailDescription">
+                <h2>Group members: </h2>
                 <ul>
                     {{range .Members}}
-                        <li>{{.}}</li>
+                        <p>{{.}}</p>
                     {{end}}
                 </ul>
             </div>
+        </div>
+        <div class="group-generalDescription">
+            <div id="fondation-group">
+                <p>Creation date: {{.CreationDate}}</p>
+                <p>First album: {{.FirstAlbum}}</p>
             </div>
-            <div class="overlay"></div>
-            <div class="modal">
-                <h2>Fenêtre au milieu</h2>
-                {{range .Concerts}}
-                    <p>{{.}}</p>
-                {{end}}
-                <button class="close-btn" onclick="closeModal()">Fermer</button>
-                <script>
-                    function closeModal() {
-                        document.querySelector('.overlay').style.display = 'none';
-                        document.querySelector('.modal').style.display = 'none';
-                    }
-                    function showModal() {
-                        document.querySelector('.overlay').style.display = 'block';
-                        document.querySelector('.modal').style.display = 'block';
-                    }
-                </script>
+
+            <div class="group-detailDescription">
+                <h2>Concert date: </h2>   
+                <ul>
+                    {{range .Concerts}}
+                    <p><a href="https://www.google.fr/maps/place/{{.ConcertPlace}}">{{.ConcertPlace}}</a> : {{.ConcertDate}}</p>
+                    {{end}}
+                </ul>
             </div>
         </div>
-    </div>
+    </main>
 </body>
 </html>

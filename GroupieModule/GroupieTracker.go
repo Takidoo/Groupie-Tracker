@@ -23,7 +23,12 @@ type GroupInfos struct {
 	Locations    string   `json:"locations"`
 	ConcertDates string   `json:"concertDates"`
 	Relations    string   `json:"relations"`
-	Concerts     []string
+	Concerts     []ConcertData
+}
+
+type ConcertData struct {
+	ConcertPlace string
+	ConcertDate  string
 }
 
 var Artists []GroupInfos
@@ -114,8 +119,11 @@ func InfoPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	groupId += -1
-	var concertsData, _ = ArtistConcertData(Artists[groupId].Locations, Artists[groupId].Relations)
-	print(concertsData[0])
+	var concertPlacesData, concertDatesData = ArtistConcertData(Artists[groupId].Locations, Artists[groupId].Relations)
+	var AllConcerts []ConcertData
+	for i := 0; i < len(concertPlacesData); i++ {
+		AllConcerts = append(AllConcerts, ConcertData{concertPlacesData[i], concertDatesData[i]})
+	}
 	data := GroupInfos{
 		ID:           Artists[groupId].ID,
 		Image:        Artists[groupId].Image,
@@ -126,7 +134,7 @@ func InfoPage(w http.ResponseWriter, r *http.Request) {
 		Locations:    Artists[groupId].Locations,
 		ConcertDates: Artists[groupId].ConcertDates,
 		Relations:    Artists[groupId].Relations,
-		Concerts:     concertsData,
+		Concerts:     AllConcerts,
 	}
 	tmpl, _ := template.ParseFiles("templates/groupinfo.html")
 	tmpl.Execute(w, data)
@@ -137,6 +145,5 @@ func RsrcInit() bool {
 		print("Erreur lors de la tentative de récupération des artistes")
 		return false
 	}
-
 	return true
 }

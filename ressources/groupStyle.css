@@ -1,124 +1,230 @@
-body {
-    font-family: Arial, sans-serif;
+*{
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
-    color: #333;
+    box-sizing: border-box;
 }
-global-container {
+
+/*import d'une police google pour grand écran*/
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+.rock-salt-regular {
+    font-family: "Rock Salt", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+/*media-queries afin d'adapter le layout en fonction de la taille d'écran*/
+@media (max-width: 600px){/*taille pour écran mobile entre 320px(comme definit dans le body) et 600px*/
+    body{
+        flex-direction: column;
+        align-items: center;
+    }
+    #groups-container{
+        overflow-y: auto;
+        justify-content: center;/*centre les div enfants verticalement*/
+        align-items: center;/*centre les div enfants horizontalement*/
+        padding: 3vw;
+    }
+    .group-generalDescription{
+        flex-direction: column;/*dispose les éléments verticalement*/
+        align-items: center;
+        width: 90%;/*agrandit à 90% au lieu de 70% la largeur du conteneur*/
+
+    }
+    .group-detailDescription{
+        margin: 5% auto 0%;/*permet de centré automatiquement horizontalement en fonction de la div parent et rajoute 5% en haut*/
+        max-width: 500px;/*évite que l'item devienne trop grand et permet de mieux centré le contenu*/
+        width: 85%;
+        padding: 5vw;
+    }
+    h2{
+        font-size: clamp(1.5rem, 5vw, 1.2rem);
+    }
+    p{
+        font-size: clamp(1rem, 4vw, 1.2rem);
+    }
+}
+
+@media (min-width: 600px) and (max-width: 1024px){/*taille de tablette*/
+    #group-container{
+        max-width: 85vw;/*la taille du conteneur principal ne dépasse pas 85% de la largeur de l'écran*/
+        padding: 2vw;/*ajoute un padding de 2% en largeur*/
+    }
+    .group-generalDescription{
+        width: 80%;/*adapte la taille du contenu à 80%*/
+    }
+    .group-detailDescription{
+        width: 75%;/*réduit la taille du contenu enfants interne*/
+        padding: 4vw;/*évite un espacement des éléments trop important*/
+    }
+    h2{
+        font-size: clamp(2rem, 4vw, 3rem);
+    }
+    p{
+        font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    }
+}
+
+@media (min-width: 1024px){/*taille plus grand qu'une tablette*/
+    #group-container{
+        max-width: 80vw;
+        padding: 2vw;
+    }
+    .group-generalDescription{
+        width: 70%;/*évite un espacement trop grand*/
+        gap: 3%;/*espace les éléments*/
+    }
+    .group-detailDescription, img{
+        width: 65%;
+    }
+    .group-detailDescription{
+        padding: 3vw;
+    }
+    h1, h2{
+        font-family: 'rock-salt-regular';/*changement du style de la police*/
+    }
+    h2{
+        font-size: clamp(2.5rem, 3vw, 3.5rem);
+        transition: transform 0.3s ease-in-out;/*effet de transition de 0.5s*/
+    }
+    p{
+        font-size: clamp(1.4rem, 2vw, 1.8rem);
+        transition: transform 0.3s ease-in-out;/*effet de transition de 0.5s*/
+    }
+}
+
+body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;/*prend toute la hauteur de l'écran sans déborder*/
+    max-width: 1920px;/*évite un affichage trop large sur grand écran*/
+    min-width: 320px;/*largeur minimale pour un affichage standard mobile*/
+    margin: 0 auto;/*centre le contenu horizontalement pour les écrans larges*/
+    background-color:#53005d;
     height: 100vh;
+    overflow: hidden;
+}
+header {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    margin: 4%;
+    padding: 0% 5%;/*0% en haut et en bas, 5% sur les cotés*/
+    width: 100%;/*prend toute la largeur de l'écran*/
+    justify-content: space-between;/*place les éléments à l'extrémité de la div parent*/
+    align-items: center;
+}
+header h1 {
+    display: flex;/*le titre se comporte comme un bloc, centré dans la div parent*/
+    color: #ffd900 !important;
+    font-size: clamp(2rem, 6vw, 4rem);
+    text-shadow:5px 5px 2px rgba(255, 255, 255, 0.5);/*contour du texte*//*horizontale, verticale, floutage, couleur*/
+    max-width: 100%;/*évite de débordement*/
+}
+button{
+    display: flex;
+    position: relative;
+    width: clamp(100px, 10vw, 250px);/*largeur de 250px pour éviter qu'elle devienne trop petite, à 600px pour garder une taille raisonnable à l'écran*/
+    padding: clamp(0.5rem, 1vh, 1rem);
+    margin-left: 35%;
+    align-items: center;
+    background-color:#53005d !important;
+    border: 2px solid #ffd900 !important;
+    border-radius: 5px !important;
+    cursor: pointer;
+}
+
+button h3{
+    display: flex;/*le titre se comporte comme un bloc, centré dans la div parent*/
+    margin: 0;
+    justify-items: center;
+    color: #ffd900 !important;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+}
+header button:hover{
+    background-color: #ffd900 !important;
+    color: #000 !important;
+    transform: scale(1.05);/*agrandit le titre de 150%*/
+    transition: transform 0.3s ease-in-out;/*effet de transition de 0.5s*/
 }
 a {
     text-align: center;
     text-decoration: none;
 }
-header {
-    background-color: #007BFF;
-    color: white;
-    padding: 20px;
-    text-align: center;
-}
-header h1 {
-    margin: 0;
-    font-size: 24px;
-}
-.search-bar {
-    margin: 20px auto;
-    max-width: 600px;
-    display: flex;
-    gap: 10px;
-}
-.search-bar input[type="text"] {
-    flex: 1;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-.search-bar button {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: white;
-    background-color: #007BFF;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    box-sizing: border-box;
-}
-.search-bar button:hover {
-    background-color: #0056b3;
-    font-size: 1rem;
-}
-.groups-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /*responsive: les colonnes s'adapte automatiquement à l'espace disponible */
-    gap: 30px;
-    grid-auto-flow: column;
-    width: 100%;
-    height: calc(100vh - 160px);/* Ajuste en fonction de l'espace pris par le header */
-    background: white;
-    box-sizing: border-box;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    overflow: auto;
-}
 
-.item-group {
-    width: 150px;
-    display: flex;
-    flex-flow:column wrap;
-    justify-content: center;
-    text-align: center;
-}
-.item-group img{
-    display: flex;
+#groups-container {
+    display:flex;
+    position: relative;
     flex-wrap: wrap;
-    align-items: center;
-    max-width: 100%;
-    max-height: 100vh;
-    object-fit: cover;
-    border-radius: 30px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 90vw;/*largeur maximale de 90% de la largeur de l'écran*/
+    padding: 2vw;
+    margin: 2% 0%;
+    justify-content: center;/*centre sur le reste de la page*/
+    background: rgba(0, 0, 0, 0.2);/*fond du header transparent*/
+    backdrop-filter: blur(2rem);/*effet de flou sur l'arrière plan du header*/
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);/*bordure pour renforcer l'effet bulle*/
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3),/*effet d'ombre principale externe*/
+                inset 0 2px 5px rgba(255, 255, 255, 0.5);/*effet de lumière interne*/
+    height: auto;/* Ajuste en fonction de l'espace pris par le header */
+    overflow-y: auto;/*défilement verticale du conteneur si necessaire*/
 }
-.item-group h2 {
-    margin: 0;
-    font-size: 18px;
+.group-generalDescription {
+    display: flex;
+    flex-wrap: nowrap;/*iterdit le retour à la ligne*/
+    justify-content: space-between;/*place les éléments à l'extrémité de la div parent*/
+    padding: 2vw;
+    gap: 5%;
+    width: 100vw;/*prend 100% de la largeur du parent*/
+    height: auto;
+}
+img {
+    width: clamp(6rem, 30%, 40rem);
+    height: fit-content;/*ajuste la hauteur de l'image à son contenu*/
+    border-radius: 50%;/*forme ronde*/
+    box-shadow: 0 2px 5px rgb(255, 255, 255);/*effet d'ombre externe*/
+    object-fit: cover;/*ajuste l'image à la taille de la div parent*/
+    object-position: center;/*centre l'image dans la div parent*/
+    transition: transform 0.3s ease-in-out;
+}
+.group-detailDescription{
+    display: flex;
+    flex-direction: column;
+    width: 70%;/*prend 70% de la largeur du parent*/
+    align-self: flex-start;/*empeche les div de s'étirer*/
+    height: auto;/*permet à la div de prendre la hauteur de son contenu*/
+    padding: 2vw;
+    background: rgba(0, 0, 0, 0.2);/*fond du header transparent*/
+    backdrop-filter: blur(2rem);/*effet de flou sur l'arrière plan du header*/
+    border-radius: 2%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3),/*effet d'ombre principale externe*/
+                inset 0 2px 5px rgba(255, 255, 255, 0.5);/*effet de lumière interne*/
+    border: 1px solid rgba(255, 255, 255, 0.3);/*bordure pour renforcer l'effet bulle*/
+}
+#fondation-group{
+    display: flex;
+    flex-direction:column;
+    width: 30%;
+    justify-content: center;
+}
+h2 {
+    display: flex;
+    justify-content: center;
+    font-size: clamp(1.5rem, 3vw, 3rem);
     font-weight: bold;
-    color: #007BFF;
-}
-.item-group p {
-    margin: 5px 0 0;
-    font-size: 14px;
-    color: #555;
-}
-/*.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(10px);
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 10;
-}*/
-.close-btn {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 15px;
-    background-color: #007BFF;
-    color: white;
-    text-decoration: none;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
+    color: #ffd900 !important;
 }
 
-.close-btn:hover {
-    background-color: #0056b3;
+ul{
+    display: flex;
+    flex-flow: column wrap;
+    overflow-y: auto;
+    align-content: space-around;
+}
+p {
+    margin: 2% 0%;
+    text-align:left;
+    font-size: clamp(1rem, 1.8vw, 1.4rem);
+    color: #00d0ff !important;
 }
