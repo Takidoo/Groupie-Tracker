@@ -18,6 +18,17 @@
                     <option value="3">Creation Date</option>
                     <option value="4">Members</option>
                 </select>
+                <input type="date" id="date1" name="dateStart" required disabled="true">
+                <input type="date" id="date2" name="dateEnd" required disabled="true">
+                <input id="dateCheckBox" type="checkbox"/>
+                <script>
+                    document.getElementById("dateCheckBox").addEventListener("change", function () {
+                    let dateStart = document.getElementById("date1");
+                    let dateEnd = document.getElementById("date2");
+                    dateEnd.disabled = !dateEnd.disabled;
+                    dateStart.disabled = !dateStart.disabled;
+                });
+                </script>
             </form>
         </div>
     </header>

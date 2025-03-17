@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type SearchPageData struct {
@@ -41,11 +42,20 @@ func SearchPage(w http.ResponseWriter, r *http.Request) {
 			tmpl.Execute(w, ErrorData{ErrorMessage: "Invalid Filter"})
 			return
 		}
-		data := SearchPageData{
-			Groups: Search(r.FormValue("userInput"), Artists, searchType),
+		searchResult := Search(r.FormValue("userInput"), Artists, searchType)
+		if r.FormValue("dateStart") != "" {
+			data := SearchPageData{
+				Groups: DateFilter(r.FormValue("dateStart"), r.FormValue("dateEnd"), searchResult),
+			}
+			tmpl, _ := template.ParseFiles("templates/search.html")
+			tmpl.Execute(w, data)
+		} else {
+			data := SearchPageData{
+				Groups: searchResult,
+			}
+			tmpl, _ := template.ParseFiles("templates/search.html")
+			tmpl.Execute(w, data)
 		}
-		tmpl, _ := template.ParseFiles("templates/search.html")
-		tmpl.Execute(w, data)
 	} else {
 		data := SearchPageData{
 			Groups: Artists,
@@ -53,6 +63,21 @@ func SearchPage(w http.ResponseWriter, r *http.Request) {
 		tmpl, _ := template.ParseFiles("templates/search.html")
 		tmpl.Execute(w, data)
 	}
+}
+
+func DateFilter(dateMin string, dateMax string, infos []GroupInfos) []GroupInfos {
+	layout := "2006-01-02"
+	layoutAPI := "02-01-2006"
+	startDate, _ := time.Parse(layout, dateMin)
+	endDate, _ := time.Parse(layout, dateMax)
+	var result []GroupInfos
+	for i := 0; i < len(infos); i++ {
+		parsedDate, _ := time.Parse(layoutAPI, infos[i].FirstAlbum)
+		if parsedDate.After(startDate) && parsedDate.Before(endDate) {
+			result = append(result, infos[i])
+		}
+	}
+	return result
 }
 
 func SearchByName(input string, infos []GroupInfos) []GroupInfos {
