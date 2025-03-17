@@ -2,6 +2,13 @@
     margin: 0;
     padding: 0;
 }
+/*import d'une police google pour grand écran*/
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+.rock-salt-regular {
+    font-family: "Rock Salt", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
 
 /*media-queries afin d'adapter le layout en fonction de la taille d'écran*/
 @media (max-width: 600px){/*taille pour écran mobile entre 320px(comme definit dans le body) et 600px*/
@@ -36,12 +43,13 @@
     }
     .item-group{
         width: 80%;/*prend un espace plus adapté pour les écrans mobiles*/
+        margin: auto 5%;
     }
     .item-group img{
         border-radius: 15px;
     }
     .item-group h4{
-        font-size: clamp(1rem, 5vw, 1.8rem);
+        font-size: clamp(2.5rem, 8vw, 3.5rem);
     }
 }
 @media (min-width:600px) and (max-width: 1024px){/*taille de tablette*/
@@ -69,6 +77,9 @@
     header h1{
         font-size: clamp(3rem, 4vw, 4rem);
     }
+    h1, h4{
+        font-family: 'rock-salt-regular';/*changement du style de la police*/
+    }
     .search-bar{
         width: clamp(500px, 60%, 800px);/*60 de largeur d'écran pour ne pas etre trop large*/
     }
@@ -83,7 +94,7 @@
         width: 20%;
     }
     .item-group h4{
-        font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+        font-size: clamp(1.6rem, 3vw, 2.4rem);
     }
 }
 
@@ -220,7 +231,7 @@ header h1 {
 
 .item-group h4 {
     padding-top:7%;
-    font-size: clamp(0.5rem, 1.5vw, 1rem);
+    font-size: clamp(0.75rem, 2vw, 2rem);
     font-weight: bold;
     color: #fb2bff;
 }
