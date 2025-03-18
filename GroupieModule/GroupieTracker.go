@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type SearchPageData struct {
@@ -14,7 +13,7 @@ type SearchPageData struct {
 type ErrorData struct {
 	ErrorMessage string
 }
-type GroupInfos struct {
+type GroupInfos struct { // Structure qui stocke les informations d'un groupe
 	ID           int      `json:"id"`
 	Image        string   `json:"image"`
 	Name         string   `json:"name"`
@@ -27,20 +26,20 @@ type GroupInfos struct {
 	Concerts     []ConcertData
 }
 
-type ConcertData struct {
+type ConcertData struct { // Structure qui stocke les données d'un concert
 	ConcertPlace string
 	ConcertDate  string
 }
 
-var Artists []GroupInfos
+var Artists []GroupInfos // Liste de tous les Artistes
 
 func SearchPage(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
-		searchResult := Search(r.FormValue("userInput"), Artists)
+		searchResult := Search(r.FormValue("userInput"), Artists) // Appelle la fonction qui gère la recherche
 		filterType := r.FormValue("filterType")
-		if filterType != "" {
+		if filterType != "" { // Si les tris sont activés, alors on trie
 			filterTypeint, _ := strconv.Atoi(filterType)
-			searchResult = ArtistsFilter(filterTypeint, searchResult)
+			searchResult = ArtistsSort(filterTypeint, searchResult)
 		}
 		data := SearchPageData{
 			Groups: searchResult,
@@ -56,9 +55,9 @@ func SearchPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func ArtistsFilter(filterType int, groups []GroupInfos) []GroupInfos {
+func ArtistsSort(filterType int, groups []GroupInfos) []GroupInfos {
 	switch filterType {
-	case 1:
+	case 1: // Plus anciens
 		n := len(groups)
 		for i := 0; i < n-1; i++ {
 			for j := 0; j < n-i-1; j++ {
@@ -69,7 +68,7 @@ func ArtistsFilter(filterType int, groups []GroupInfos) []GroupInfos {
 		}
 		return groups
 		break
-	case 2:
+	case 2: // Plus récents
 		n := len(groups)
 		for i := 0; i < n-1; i++ {
 			for j := 0; j < n-i-1; j++ {
@@ -80,7 +79,7 @@ func ArtistsFilter(filterType int, groups []GroupInfos) []GroupInfos {
 		}
 		return groups
 		break
-	case 3:
+	case 3: // Nombre de membre >
 		n := len(groups)
 		for i := 0; i < n-1; i++ {
 			for j := 0; j < n-i-1; j++ {
@@ -91,7 +90,7 @@ func ArtistsFilter(filterType int, groups []GroupInfos) []GroupInfos {
 		}
 		return groups
 		break
-	case 4:
+	case 4: // Nombre de membres <
 		n := len(groups)
 		for i := 0; i < n-1; i++ {
 			for j := 0; j < n-i-1; j++ {
@@ -106,35 +105,20 @@ func ArtistsFilter(filterType int, groups []GroupInfos) []GroupInfos {
 
 }
 
-func DateFilter(dateMin string, dateMax string, infos []GroupInfos) []GroupInfos {
-	layout := "2006-01-02"
-	layoutAPI := "02-01-2006"
-	startDate, _ := time.Parse(layout, dateMin)
-	endDate, _ := time.Parse(layout, dateMax)
-	var result []GroupInfos
-	for i := 0; i < len(infos); i++ {
-		parsedDate, _ := time.Parse(layoutAPI, infos[i].FirstAlbum)
-		if parsedDate.After(startDate) && parsedDate.Before(endDate) {
-			result = append(result, infos[i])
-		}
-	}
-	return result
-}
-
-func Search(input string, infos []GroupInfos) []GroupInfos {
+func Search(input string, infos []GroupInfos) []GroupInfos { // Fonction de recherche qui gère tous les filtres
 	var output []GroupInfos
 	for i := 0; i < len(infos); i++ {
-		if strings.Contains(string(infos[i].CreationDate), strings.ToLower(input)) {
+		if strings.Contains(string(infos[i].CreationDate), strings.ToLower(input)) { // Date de création
 			output = append(output, infos[i])
 			continue
-		} else if strings.Contains(strings.ToLower(infos[i].FirstAlbum), strings.ToLower(input)) {
+		} else if strings.Contains(strings.ToLower(infos[i].FirstAlbum), strings.ToLower(input)) { // Date premier album
 			output = append(output, infos[i])
 			continue
-		} else if strings.Contains(strings.ToLower(infos[i].Name), strings.ToLower(input)) {
+		} else if strings.Contains(strings.ToLower(infos[i].Name), strings.ToLower(input)) { // Nom du groupe
 			output = append(output, infos[i])
 			continue
 		} else {
-			for k := 0; k < len(infos[i].Members); k++ {
+			for k := 0; k < len(infos[i].Members); k++ { // Membres du groupe
 				if strings.Contains(strings.ToLower(infos[i].Members[k]), strings.ToLower(input)) {
 					output = append(output, infos[i])
 					break
@@ -152,9 +136,9 @@ func InfoPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	groupId += -1
-	var concertPlacesData, concertDatesData = ArtistConcertData(Artists[groupId].Locations, Artists[groupId].Relations)
+	var concertPlacesData, concertDatesData = ArtistConcertData(Artists[groupId].Locations, Artists[groupId].Relations) // récupération des concerts du groupe
 	var AllConcerts []ConcertData
-	for i := 0; i < len(concertPlacesData); i++ {
+	for i := 0; i < len(concertPlacesData); i++ { // Création de la liste des concerts
 		AllConcerts = append(AllConcerts, ConcertData{concertPlacesData[i], concertDatesData[i]})
 	}
 	data := GroupInfos{
@@ -173,7 +157,7 @@ func InfoPage(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, data)
 }
 
-func RsrcInit() bool {
+func RsrcInit() bool { // Vérification des prérequis
 	if !FetchAllArtists("https://groupietrackers.herokuapp.com/api/artists", &Artists) {
 		print("Erreur lors de la tentative de récupération des artistes")
 		return false

@@ -22,12 +22,15 @@
         font-size: clamp(1.8rem, 6vw, 3rem);
         text-align: center; /*force à centrer le titre*/
     }
-    .search-bar{
-        width: 95%;/*largeur presque pleine de la barre de recherche et espacement réduit*/
-        gap: 6px;
+    .search-bar {
+        flex-wrap: wrap; /* Permet de passer à la ligne sur petits écrans */
+        justify-content: center;
+        width: 95%;
     }
     .search-bar [type="text"]{
         min-width: 100px;   /*largeur minimale augmenté pour le champ de texte*/
+        width: 100%;  /* Prend toute la largeur sur mobile */
+        max-width: 100%;
     }
     .search-bar button{
         min-width: 60px;    /*largeur minimale et padding réduit pour le bouton*/
@@ -35,6 +38,23 @@
     }
     .search-bar select{
         min-width: 70px;    /*largeur minimale pour le menu déroulant*/
+    }
+    .search-bar form {
+        flex-wrap: wrap;
+        justify-content: center;
+    }  
+    .search-bar [type="date"] {
+        width: 40%;
+        min-width: 70px;
+        margin-top: 5px;
+    }
+    .search-bar [type="checkbox"] {
+        margin-top: 5px;
+    }  
+    .search-bar [type="text"],
+    .search-bar button,
+    .search-bar select {
+        font-size: clamp(0.7rem, 1.5vw, 0.9rem); /* Taille de police réduite */
     }
     .groups-container{
         flex-direction: column;     /*dispose les groupes verticalement avec un espace en plus*/
@@ -152,7 +172,7 @@ header h1 {
     position: relative; /*positionnement relatif à son conteneur parent*/
     margin: 2% auto 0%;/*2% en haut, 0% en bas et auto sur les cotés*/
     width: clamp(280px, 80%, 800px);    /*largeur adaptative à l'écran*/
-    gap: 10px;  /*ajoute un espacement entre les éléments*/
+    gap: 5px;  /*ajoute un espacement entre les éléments*/
     overflow: visible;  /*affiche le contenu qui déborde*/
 }
 
@@ -175,10 +195,11 @@ header h1 {
 }
 
 .search-bar [type="text"] { 
-    flex-grow: 1;   /*le champ de texte prend tout l'espace disponible*/
+    flex-grow: 0;   /* Ne prend pas tout l'espace disponible */
     flex-shrink: 1; /*autorise la réduction */
-    min-width: clamp(120px, 30%, 400px);    /*largeur minimale et adaptative*/
-    max-width: 100%;    /*largeur maximale*/
+    max-width: 250px;  /* Limite la largeur maximale */
+    min-width: 120px;  /* Limite la largeur minimale */
+    width: clamp(120px, 25%, 250px);  /* Contrôle plus précis de la largeur */
 }
 
 .search-bar button {
@@ -192,6 +213,76 @@ header h1 {
 .search-bar button:hover {
     background-color: #ffd900 !important;   /*couleur de fond*/
     color: #000 !important; /*couleur du texte*/
+}
+
+.search-bar form {      /* Correction pour le formulaire à l'intérieur de la search bar */
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 5px;
+}
+
+.search-bar [type="date"] { /* Style pour les champs de type date */
+    padding: 0.2rem 0.3rem; 
+    font-size: 0.7rem;  /* Taille fixe plus petite */
+    background-color: #53005d !important;
+    border: 2px solid #ffd900 !important;
+    border-radius: 5px !important;
+    box-sizing: border-box;
+    height: 2.5rem;
+    color: #ffd900;
+    flex-shrink: 1; /* Permet une légère réduction */
+    width: 90px;  /* Largeur fixe */
+    white-space: nowrap;  /* Empêche le retour à la ligne */
+    overflow: hidden;  /* Cache le texte qui déborde */
+    position: relative;
+    color-scheme: dark;
+}
+
+.search-bar [type="checkbox"] {     /* Style pour la case à cocher */
+    appearance: none;
+    width: 1.2rem; /* Taille réduite */
+    height: 1.2rem; /* Taille réduite */
+    background-color: #53005d;
+    border: 2px solid #ffd900;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: center;
+    flex-shrink: 0;
+    margin: 0 3px; /* Marge réduite */
+    position: relative;
+}
+
+.search-bar [type="checkbox"]:checked {     /* Style pour la case à cocher cochée */
+    background-color: #ffd900;
+}
+
+.search-bar [type="checkbox"]:checked::after {  /* Création d'une coche personnalisée */
+    content: "";
+    position: absolute;
+    width: 0.4rem;
+    height: 0.7rem;
+    border: solid #53005d;
+    border-width: 0 2px 2px 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%) rotate(45deg);
+}
+
+.search-bar [type="date"]:disabled {    /* Style pour les champs de date désactivés */
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.search-bar [type="date"]:not(:disabled):hover {    /* Style pour le survol des champs de date */
+    border-color: #fb2bff !important;
+}
+
+.search-bar [type="date"] {     /* Style pour l'icône du calendrier en utilisant une approche compatible */
+    position: relative;
+    color-scheme: dark;
 }
 
 .groups-container { /*style pour le conteneur de groupes*/

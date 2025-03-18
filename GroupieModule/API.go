@@ -15,8 +15,8 @@ type Locations struct {
 	Dates     string   `json:"dates"`
 }
 
-func FetchAllArtists(str string, grps *[]GroupInfos) bool {
-	var resp, err = http.Get(str)
+func FetchAllArtists(url string, grps *[]GroupInfos) bool { // Fais une requête sur l'api et récupere les artistes
+	var resp, err = http.Get(url)
 	if err != nil {
 		return false
 	}
@@ -27,7 +27,7 @@ func FetchAllArtists(str string, grps *[]GroupInfos) bool {
 	return true
 }
 
-func ArtistConcertData(locURL string, relURL string) ([]string, []string) {
+func ArtistConcertData(locURL string, relURL string) ([]string, []string) { // Fais un requête sur l'API concert et les récupèrent
 	var resp, err = http.Get(locURL)
 	if err != nil {
 		return nil, nil
