@@ -1,44 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Groupie Tracker</title>
-    <link href="ressources/searchStyle.css" rel="stylesheet">
+<!DOCTYPE html>         <!--type de document-->
+<html lang="en">        <!--balise racine HTML avec la langue par defaut en anglais-->
+<head>                  <!--en-tete-->
+    <title>Groupie Tracker</title>                              <!--titre de la page qui apparait dans le navigateur-->
+    <link href="ressources/searchStyle.css" rel="stylesheet">   <!--lien vers la feuille de style css-->
+    <link rel="preconnect" href="https://fonts.googleapis.com"> <!--préconnexions aux serveurs de la police google pour améliorer le chargement-->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
-<body>
-    <header> 
-        <img src="ressources/background-original.jpg" alt="background" id="background">
-        <h1>Groupie Tracker</h1>
-        <div class="search-bar">
-            <form action="/" method="post" id="searchForm">         
-                <input type="text" placeholder="search a group..." name="userInput" value=""/>
+<body>          <!--corp de la page-->
+    <header>    <!--en-tete de la page-->
+        <img src="ressources/background-original.jpg" alt="background" id="background"> <!--image d'arrière-plan avec texte alternatif pour description-->
+        <h1>Groupie Tracker</h1>                            <!--titre principal-->
+        <div class="search-bar">                            <!--conteneur de la barre de recherche-->
+            <form action="/" method="post" id="searchForm"> <!--formulaire qui envoi des données de recherche à la racine du site via la méthode post-->         
+                <input type="text" placeholder="search a group..." name="userInput" value=""/>  <!--champ de texte pour la recherche avec un texte de description pour savoir quoi écrire-->
                 <button type="submit">Search</button>
-                <select name="searchType">
-                    <option value="1">Name</option>
-                    <option value="2">First Album Name</option>
-                    <option value="3">Creation Date</option>
-                    <option value="4">Members</option>
-                </select>
-                <input type="date" id="date1" name="dateStart" required disabled="true">
-                <input type="date" id="date2" name="dateEnd" required disabled="true">
-                <input id="dateCheckBox" type="checkbox"/>
+                <input id="filterCheckBox" type="checkbox">
                 <script>
-                    document.getElementById("dateCheckBox").addEventListener("change", function () {
-                    let dateStart = document.getElementById("date1");
-                    let dateEnd = document.getElementById("date2");
-                    dateEnd.disabled = !dateEnd.disabled;
-                    dateStart.disabled = !dateStart.disabled;
+                    document.getElementById("filterCheckBox").addEventListener("change", function () {
+                    let filterbox = document.getElementById("filterBox");
+                    filterbox.disabled = !filterbox.disabled;
                 });
                 </script>
+                <select name="filterType" id="filterBox" disabled>                  <!--menu déroulant pour définir le type de recherche-->
+                    <!--critères de recherche-->
+                    <option value="1">Plus anciens groupes</option>
+                    <option value="2">Plus récents groupes</option>
+                    <option value="3">Nombre de membres (croissant)</option>
+                    <option value="3">Nombre de membres (décroissant)</option>
+                </select>
             </form>
         </div>
     </header>
-    <div class="groups-container">
-    {{range .Groups}}
-        <div class="item-group">
-            <a href="/info?id={{.ID}}"><img src="{{.Image}}" alt="Group Picture"></a>
-            <h4>{{.Name}}</h4>
+    <main class="groups-container">         <!--conteneur principal contenant l'intégralité des groupes du site-->
+    {{range .Groups}}                       <!--boucle en go qui fais la liste de tous les groupes-->
+        <div class="item-group">            <!--création d'un conteneur pour chacun des groupes-->
+            <a href="/info?id={{.ID}}"><img src="{{.Image}}" alt="Group Picture"></a>   <!--lien vers la page d'information du groupe sélectionné grâce à l'image-->
+            <h4>{{.Name}}</h4>              <!--récupération du nom de chaque groupe-->
         </div>
-    {{end}}
-    </div>
+    {{end}}                                 <!--fin de boucle-->
+    </main>
 </body>
 </html>

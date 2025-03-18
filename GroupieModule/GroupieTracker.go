@@ -36,26 +36,17 @@ var Artists []GroupInfos
 
 func SearchPage(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
-		var searchType, err = strconv.Atoi(r.FormValue("searchType"))
-		if err != nil {
-			tmpl, _ := template.ParseFiles("templates/error.html")
-			tmpl.Execute(w, ErrorData{ErrorMessage: "Invalid Filter"})
-			return
+		searchResult := Search(r.FormValue("userInput"), Artists)
+		filterType := r.FormValue("filterType")
+		if filterType != "" {
+			filterTypeint, _ := strconv.Atoi(filterType)
+			searchResult = ArtistsFilter(filterTypeint, searchResult)
 		}
-		searchResult := Search(r.FormValue("userInput"), Artists, searchType)
-		if r.FormValue("dateStart") != "" {
-			data := SearchPageData{
-				Groups: DateFilter(r.FormValue("dateStart"), r.FormValue("dateEnd"), searchResult),
-			}
-			tmpl, _ := template.ParseFiles("templates/search.html")
-			tmpl.Execute(w, data)
-		} else {
-			data := SearchPageData{
-				Groups: searchResult,
-			}
-			tmpl, _ := template.ParseFiles("templates/search.html")
-			tmpl.Execute(w, data)
+		data := SearchPageData{
+			Groups: searchResult,
 		}
+		tmpl, _ := template.ParseFiles("templates/search.html")
+		tmpl.Execute(w, data)
 	} else {
 		data := SearchPageData{
 			Groups: Artists,
@@ -63,6 +54,56 @@ func SearchPage(w http.ResponseWriter, r *http.Request) {
 		tmpl, _ := template.ParseFiles("templates/search.html")
 		tmpl.Execute(w, data)
 	}
+}
+
+func ArtistsFilter(filterType int, groups []GroupInfos) []GroupInfos {
+	switch filterType {
+	case 1:
+		n := len(groups)
+		for i := 0; i < n-1; i++ {
+			for j := 0; j < n-i-1; j++ {
+				if groups[j].CreationDate > groups[j+1].CreationDate {
+					groups[j], groups[j+1] = groups[j+1], groups[j]
+				}
+			}
+		}
+		return groups
+		break
+	case 2:
+		n := len(groups)
+		for i := 0; i < n-1; i++ {
+			for j := 0; j < n-i-1; j++ {
+				if groups[j].CreationDate < groups[j+1].CreationDate {
+					groups[j], groups[j+1] = groups[j+1], groups[j]
+				}
+			}
+		}
+		return groups
+		break
+	case 3:
+		n := len(groups)
+		for i := 0; i < n-1; i++ {
+			for j := 0; j < n-i-1; j++ {
+				if len(groups[j].Members) > len(groups[j+1].Members) {
+					groups[j], groups[j+1] = groups[j+1], groups[j]
+				}
+			}
+		}
+		return groups
+		break
+	case 4:
+		n := len(groups)
+		for i := 0; i < n-1; i++ {
+			for j := 0; j < n-i-1; j++ {
+				if len(groups[j].Members) < len(groups[j+1].Members) {
+					groups[j], groups[j+1] = groups[j+1], groups[j]
+				}
+			}
+		}
+		return groups
+	}
+	return groups
+
 }
 
 func DateFilter(dateMin string, dateMax string, infos []GroupInfos) []GroupInfos {
@@ -80,61 +121,28 @@ func DateFilter(dateMin string, dateMax string, infos []GroupInfos) []GroupInfos
 	return result
 }
 
-func SearchByName(input string, infos []GroupInfos) []GroupInfos {
-	var output []GroupInfos
-	for i := 0; i < len(infos); i++ {
-		if strings.Contains(strings.ToLower(infos[i].Name), strings.ToLower(input)) {
-			output = append(output, infos[i])
-		}
-	}
-	return output
-}
-
-func SearchByAlbumName(input string, infos []GroupInfos) []GroupInfos {
-	var output []GroupInfos
-	for i := 0; i < len(infos); i++ {
-		if strings.Contains(strings.ToLower(infos[i].FirstAlbum), strings.ToLower(input)) {
-			output = append(output, infos[i])
-		}
-	}
-	return output
-}
-
-func SearchByCreationDate(input string, infos []GroupInfos) []GroupInfos {
+func Search(input string, infos []GroupInfos) []GroupInfos {
 	var output []GroupInfos
 	for i := 0; i < len(infos); i++ {
 		if strings.Contains(string(infos[i].CreationDate), strings.ToLower(input)) {
 			output = append(output, infos[i])
-		}
-	}
-	return output
-}
-
-func searchByMembers(input string, infos []GroupInfos) []GroupInfos {
-	var output []GroupInfos
-	for i := 0; i < len(infos); i++ {
-		for k := 0; k < len(infos[i].Members); k++ {
-			if strings.Contains(strings.ToLower(infos[i].Members[k]), strings.ToLower(input)) {
-				output = append(output, infos[i])
+			continue
+		} else if strings.Contains(strings.ToLower(infos[i].FirstAlbum), strings.ToLower(input)) {
+			output = append(output, infos[i])
+			continue
+		} else if strings.Contains(strings.ToLower(infos[i].Name), strings.ToLower(input)) {
+			output = append(output, infos[i])
+			continue
+		} else {
+			for k := 0; k < len(infos[i].Members); k++ {
+				if strings.Contains(strings.ToLower(infos[i].Members[k]), strings.ToLower(input)) {
+					output = append(output, infos[i])
+					break
+				}
 			}
 		}
 	}
 	return output
-}
-
-func Search(input string, infos []GroupInfos, searchType int) []GroupInfos {
-	switch searchType {
-	case 1:
-		return SearchByName(input, infos)
-	case 2:
-		return SearchByAlbumName(input, infos)
-	case 3:
-		return SearchByCreationDate(input, infos)
-	case 4:
-		return searchByMembers(input, infos)
-
-	}
-	return infos
 }
 func InfoPage(w http.ResponseWriter, r *http.Request) {
 	var groupId, err = strconv.Atoi(r.URL.Query().Get("id"))

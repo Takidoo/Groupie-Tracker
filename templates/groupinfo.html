@@ -1,151 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>a
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Groupie Tracker - Artist Profile</title>
-    <style>
-        /* Basic reset for margins and padding */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Copper Black', sans-serif; /* Using Copper Black font */
-            background: linear-gradient(to bottom right, #2E1A47, #5A2A6B); /* Gradient with two shades of purple */
-            color: white;
-            padding: 20px;
-            display: flex;
-            justify-content: center; /* Center content horizontally */
-            align-items: center; /* Center content vertically */
-            height: 100vh; /* Full height */
-        }
-
-        /* Main container for the whole page */
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Artist name */
-        .artist-name {
-            font-size: 4em;
-            font-weight: bold;
-            color: #F2D900; /* Yellow color for the artist name */
-            margin-top: 40px;
-        }
-
-        /* Group section with artist photo, member list, first album, and concert dates */
-        .group-section {
-            display: flex;
-            flex-direction: column; /* Stack all items vertically */
-            align-items: center; /* Center everything horizontally */
-            justify-content: center;
-            margin-top: 50px;
-            background-color: #3F1C63; /* Slightly lighter purple */
-            padding: 40px;
-            border-radius: 10px;
-            width: 80%;
-            text-align: center; /* Center align the content */
-        }
-
-        /* Artist picture - Round image */
-        .artist-picture {
-            width: 200px; /* Reduced size */
-            height: 200px;
-            object-fit: cover;
-            border-radius: 50%; /* Make the image round */
-            border: 6px solid #F2D900; /* Golden yellow border */
-            margin-right: 30px; /* Space between the image and group members */
-        }
-
-        /* Group members list */
-        .members-list {
-            color: #F2D900;
-            text-align: left; /* Align text to the left for better readability */
-            margin-top: 20px;
-        }
-
-        .members-list h3 {
-            font-size: 1.8em;
-            margin-bottom: 20px;
-        }
-
-        .members-list ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-
-        .members-list li {
-            font-size: 1.3em;
-            margin: 10px 0;
-        }
-
-        /* First Album Section */
-        .first-album {
-            font-size: 1.5em;
-            color: #F2D900;
-            margin-top: 20px;
-        }
-
-        /* Concert Dates Section */
-        .concert-dates {
-            font-size: 1.2em;
-            color: #F2D900;
-            margin-top: 20px;
-        }
-
-    </style>
+<!DOCTYPE html>               <!--type de document-->
+<html lang="en">              <!--balise racine HTML avec la langue par defaut en anglais-->
+<head>                        <!--en-tete-->
+    <title>{{.Name}}</title>                                        <!--titre de la page qui apparait dans le navigateur-->
+    <link href="ressources/groupStyle.css" rel="stylesheet">        <!--lien vers la feuille de style css-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">     <!--préconnexions aux serveurs de la police google pour améliorer le chargement-->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
-<body>
-
-    <div class="container">
-        <!-- Artist Name -->
-        <div class="artist-name">
-            <!-- Replace with the artist's name -->
-            {{.Name}}
-        </div>
-
-        <!-- Group Section: Artist picture, members, first album, and concert dates -->
-        <div class="group-section">
-            <!-- Artist Picture: Replace src with the artist's photo -->
-            <div style="display: flex; justify-content: center; align-items: center;">
-                <img src="{{.Image}}" alt="Artist Photo" class="artist-picture">
-
-                <div class="members-list">
-                    <h3>Group Members:</h3>
-                    <ul>
-                        <!-- Replace these list items with actual group members -->
-                        {{range .Members}}
-                            <p>{{.}}</p>
-                        {{end}}
-                        <!-- Add more members as needed -->
-                    </ul>
-                </div>
-            </div>
-
-            <!-- First Album Name -->
-            <div class="first-album">
-                <!-- Replace with the name of the first album -->
-                Date du premier album : {{.FirstAlbum}}
-            </div>
-
-            <!-- Concert Dates Section -->
-            <div class="concert-dates">
-                <h4>Concert Dates:</h4>
-                {{range .Concerts}}
-                    <p><a href="https://www.google.fr/maps/place/{{.ConcertPlace}}">{{.ConcertPlace}}</a> : {{.ConcertDate}}</p>
-                {{end}}
-                <!-- Add more concert dates as needed -->
+<body>                                                              <!--corp de la page-->
+    <header>                                                        <!--en-tete de la page-->
+        <h1>{{.Name}}</h1>                                          <!--titre principal-->
+        <button><a href="/"><h3>Back to groups</h3></a></button>    <!--bouton pour revenir à la page précédente grace au lien qui renvoi à la racine du site-->
+    </header>
+    
+    <main id="groups-container">                         <!--conteneur principal contenant l'intégralité des informations du groupe-->
+        <div class="group-generalDescription">           <!--conteneur pour les informations générales du groupe-->
+            <img src="{{.Image}}" alt="Group Picture">   <!--image du groupe -->
+            <div class="group-detailDescription">        <!--conteneur pour les informations détaillées du groupe, dans cette partie une description des membres du groupe-->
+                <h2>Group members: </h2>                 <!--titre de la div contenant les membres du groupe-->
+                <ul>                                     <!--liste non ordonnée pour afficher les membres du groupe-->
+                    {{range .Members}}                   <!--boucle en go qui fait la liste de tous les membres du groupe-->
+                        <p>{{.}}</p>                     <!--affichage de chaque membre trouvé dans la liste-->
+                    {{end}}                              <!--fin de boucle-->
+                </ul>
             </div>
         </div>
-    </div>
+        <div class="group-generalDescription">          <!--deuxieme conteneur pour les informations générales du groupe-->
+            <div id="fondation-group">                  <!--conteneur pour les informations de bases sur la création du groupe-->
+                <p>Creation date: {{.CreationDate}}</p> <!--date de création du groupe-->
+                <p>First album: {{.FirstAlbum}}</p>     <!--premier album du groupe-->
+            </div>
 
+            <div class="group-detailDescription">   <!--deuxieme conteneur pour les informations détaillées du groupe, dans cette partie une description des concerts du groupe-->  
+                <h2>Concert date: </h2>             <!--titre de la div contenant les dates des concerts du groupe-->   
+                <ul>                                <!--liste non ordonnée pour afficher les dates des concerts du groupe-->
+                    {{range .Concerts}}             <!--boucle en go qui fait la liste de tous les concerts du groupe-->
+                    <p><a href="https://www.google.fr/maps/place/{{.ConcertPlace}}">{{.ConcertPlace}}</a> : {{.ConcertDate}}</p>    <!--affichage de chaque concert trouvé dans la liste avec un lien vers google maps pour la localisation du concert-->
+                    {{end}}                        <!--fin de boucle-->
+                </ul>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
