@@ -31,7 +31,7 @@ type ConcertData struct { // Structure qui stocke les données d'un concert
 	ConcertDate  string
 }
 
-var Artists []GroupInfos // Liste de tous les Artistes
+var Artists []GroupInfos // Liste globale de tous les Artistes
 
 func SearchPage(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {

@@ -232,7 +232,7 @@ header h1 {
     border-radius: 5px !important;
     box-sizing: border-box;
     height: 2.5rem;
-    color: #ffd900;
+    color: #ffd900 !important;
     flex-shrink: 1; /* Permet une légère réduction */
     width: 90px;  /* Largeur fixe */
     white-space: nowrap;  /* Empêche le retour à la ligne */
@@ -326,7 +326,7 @@ header h1 {
     padding-top:7%;
     font-size: clamp(0.75rem, 2vw, 2rem);
     font-weight: bold;
-    color: #fb2bff;
+    color: #fb2bff !important;
 }
 p{
     font-size: clamp(0.7rem, 1.5vw, 1rem);
