@@ -13,17 +13,21 @@
         <div class="search-bar">                            <!--conteneur de la barre de recherche-->
             <form action="/" method="post" id="searchForm"> <!--formulaire qui envoi des données de recherche à la racine du site via la méthode post-->         
                 <input type="text" placeholder="search a group..." name="userInput" value=""/>  <!--champ de texte pour la recherche avec un texte de description pour savoir quoi écrire-->
-                <button type="submit">Search</button>       <!--bouton qui soumet la recherche-->
-                <select name="searchType">                  <!--menu déroulant pour définir le type de recherche-->
+                <button type="submit">Search</button>
+                <input id="filterCheckBox" type="checkbox">
+                <script>
+                    document.getElementById("filterCheckBox").addEventListener("change", function () {
+                    let filterbox = document.getElementById("filterBox");
+                    filterbox.disabled = !filterbox.disabled;
+                });
+                </script>
+                <select name="filterType" id="filterBox" disabled>                  <!--menu déroulant pour définir le type de recherche-->
                     <!--critères de recherche-->
-                    <option value="1">Name</option>
-                    <option value="2">First Album Name</option>
-                    <option value="3">Creation Date</option>
-                    <option value="4">Members</option>
+                    <option value="1">Plus anciens groupes</option>
+                    <option value="2">Plus récents groupes</option>
+                    <option value="3">Nombre de membres (croissant)</option>
+                    <option value="3">Nombre de membres (décroissant)</option>
                 </select>
-                <input type="date" id="date1" name="dateStart" required> <!--champ de texte pour rechercher une date de début de concert-->
-                <input type="date" id="date2" name="dateEnd" required>  <!--champ de texte pour rechercher une date de fin de concert-->
-                <input id="dateCheckBox" type="checkbox"> <!--case à cocher pour activer la recherche par date-->
             </form>
         </div>
     </header>
@@ -36,12 +40,4 @@
     {{end}}                                 <!--fin de boucle-->
     </main>
 </body>
-<script>
-    document.getElementById("dateCheckBox").addEventListener("change", function() {  //ajout d'un écouteur d'événement sur la case à cocher pour activer la recherche par date
-        let dateStart = document.getElementById("date1");  //récupération de la date de début
-        let dateEnd = document.getElementById("date2");    //récupération de la date de fin
-            dateStart.disabled = !dateStart.disabled;        //on active la date de début
-            dateEnd.disabled = !dateStart.disabled;          //on active la date de fin
-    });                                                      //fin de l'écouteur d'événement
-</script>
 </html>

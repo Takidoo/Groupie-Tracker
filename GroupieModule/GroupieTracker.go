@@ -13,7 +13,7 @@ type SearchPageData struct {
 type ErrorData struct {
 	ErrorMessage string
 }
-type GroupInfos struct {
+type GroupInfos struct { // Structure qui stocke les informations d'un groupe
 	ID           int      `json:"id"`
 	Image        string   `json:"image"`
 	Name         string   `json:"name"`
@@ -26,23 +26,23 @@ type GroupInfos struct {
 	Concerts     []ConcertData
 }
 
-type ConcertData struct {
+type ConcertData struct { // Structure qui stocke les données d'un concert
 	ConcertPlace string
 	ConcertDate  string
 }
 
-var Artists []GroupInfos
+var Artists []GroupInfos // Liste globale de tous les Artistes
 
 func SearchPage(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
-		var searchType, err = strconv.Atoi(r.FormValue("searchType"))
-		if err != nil {
-			tmpl, _ := template.ParseFiles("templates/error.html")
-			tmpl.Execute(w, ErrorData{ErrorMessage: "Invalid Filter"})
-			return
+		searchResult := Search(r.FormValue("userInput"), Artists) // Appelle la fonction qui gère la recherche
+		filterType := r.FormValue("filterType")
+		if filterType != "" { // Si les tris sont activés, alors on trie
+			filterTypeint, _ := strconv.Atoi(filterType)
+			searchResult = ArtistsSort(filterTypeint, searchResult)
 		}
 		data := SearchPageData{
-			Groups: Search(r.FormValue("userInput"), Artists, searchType),
+			Groups: searchResult,
 		}
 		tmpl, _ := template.ParseFiles("templates/search.html")
 		tmpl.Execute(w, data)
@@ -55,61 +55,78 @@ func SearchPage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func SearchByName(input string, infos []GroupInfos) []GroupInfos {
-	var output []GroupInfos
-	for i := 0; i < len(infos); i++ {
-		if strings.Contains(strings.ToLower(infos[i].Name), strings.ToLower(input)) {
-			output = append(output, infos[i])
+func ArtistsSort(filterType int, groups []GroupInfos) []GroupInfos {
+	switch filterType {
+	case 1: // Plus anciens
+		n := len(groups)
+		for i := 0; i < n-1; i++ {
+			for j := 0; j < n-i-1; j++ {
+				if groups[j].CreationDate > groups[j+1].CreationDate {
+					groups[j], groups[j+1] = groups[j+1], groups[j]
+				}
+			}
 		}
+		return groups
+		break
+	case 2: // Plus récents
+		n := len(groups)
+		for i := 0; i < n-1; i++ {
+			for j := 0; j < n-i-1; j++ {
+				if groups[j].CreationDate < groups[j+1].CreationDate {
+					groups[j], groups[j+1] = groups[j+1], groups[j]
+				}
+			}
+		}
+		return groups
+		break
+	case 3: // Nombre de membre >
+		n := len(groups)
+		for i := 0; i < n-1; i++ {
+			for j := 0; j < n-i-1; j++ {
+				if len(groups[j].Members) > len(groups[j+1].Members) {
+					groups[j], groups[j+1] = groups[j+1], groups[j]
+				}
+			}
+		}
+		return groups
+		break
+	case 4: // Nombre de membres <
+		n := len(groups)
+		for i := 0; i < n-1; i++ {
+			for j := 0; j < n-i-1; j++ {
+				if len(groups[j].Members) < len(groups[j+1].Members) {
+					groups[j], groups[j+1] = groups[j+1], groups[j]
+				}
+			}
+		}
+		return groups
 	}
-	return output
+	return groups
+
 }
 
-func SearchByAlbumName(input string, infos []GroupInfos) []GroupInfos {
+func Search(input string, infos []GroupInfos) []GroupInfos { // Fonction de recherche qui gère tous les filtres
 	var output []GroupInfos
 	for i := 0; i < len(infos); i++ {
-		if strings.Contains(strings.ToLower(infos[i].FirstAlbum), strings.ToLower(input)) {
+		if strings.Contains(string(infos[i].CreationDate), strings.ToLower(input)) { // Date de création
 			output = append(output, infos[i])
-		}
-	}
-	return output
-}
-
-func SearchByCreationDate(input string, infos []GroupInfos) []GroupInfos {
-	var output []GroupInfos
-	for i := 0; i < len(infos); i++ {
-		if strings.Contains(string(infos[i].CreationDate), strings.ToLower(input)) {
+			continue
+		} else if strings.Contains(strings.ToLower(infos[i].FirstAlbum), strings.ToLower(input)) { // Date premier album
 			output = append(output, infos[i])
-		}
-	}
-	return output
-}
-
-func searchByMembers(input string, infos []GroupInfos) []GroupInfos {
-	var output []GroupInfos
-	for i := 0; i < len(infos); i++ {
-		for k := 0; k < len(infos[i].Members); k++ {
-			if strings.Contains(strings.ToLower(infos[i].Members[k]), strings.ToLower(input)) {
-				output = append(output, infos[i])
+			continue
+		} else if strings.Contains(strings.ToLower(infos[i].Name), strings.ToLower(input)) { // Nom du groupe
+			output = append(output, infos[i])
+			continue
+		} else {
+			for k := 0; k < len(infos[i].Members); k++ { // Membres du groupe
+				if strings.Contains(strings.ToLower(infos[i].Members[k]), strings.ToLower(input)) {
+					output = append(output, infos[i])
+					break
+				}
 			}
 		}
 	}
 	return output
-}
-
-func Search(input string, infos []GroupInfos, searchType int) []GroupInfos {
-	switch searchType {
-	case 1:
-		return SearchByName(input, infos)
-	case 2:
-		return SearchByAlbumName(input, infos)
-	case 3:
-		return SearchByCreationDate(input, infos)
-	case 4:
-		return searchByMembers(input, infos)
-
-	}
-	return infos
 }
 func InfoPage(w http.ResponseWriter, r *http.Request) {
 	var groupId, err = strconv.Atoi(r.URL.Query().Get("id"))
@@ -119,9 +136,9 @@ func InfoPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	groupId += -1
-	var concertPlacesData, concertDatesData = ArtistConcertData(Artists[groupId].Locations, Artists[groupId].Relations)
+	var concertPlacesData, concertDatesData = ArtistConcertData(Artists[groupId].Locations, Artists[groupId].Relations) // récupération des concerts du groupe
 	var AllConcerts []ConcertData
-	for i := 0; i < len(concertPlacesData); i++ {
+	for i := 0; i < len(concertPlacesData); i++ { // Création de la liste des concerts
 		AllConcerts = append(AllConcerts, ConcertData{concertPlacesData[i], concertDatesData[i]})
 	}
 	data := GroupInfos{
@@ -140,7 +157,7 @@ func InfoPage(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, data)
 }
 
-func RsrcInit() bool {
+func RsrcInit() bool { // Vérification des prérequis
 	if !FetchAllArtists("https://groupietrackers.herokuapp.com/api/artists", &Artists) {
 		print("Erreur lors de la tentative de récupération des artistes")
 		return false

@@ -133,6 +133,7 @@ button{
     border: 2px solid #ffd900 !important;
     border-radius: 5px !important;
     cursor: pointer;
+    color: #53005d !important;
 }
 
 button h3{
@@ -143,8 +144,8 @@ button h3{
     font-size: clamp(0.8rem, 2vw, 1rem);
 }
 header button:hover{
-    background-color: #ffd900 !important;
-    color: #000 !important;
+    color:#ffd900 !important;
+    border-color: #53005d !important;   /*couleur de la bordure*/
     transform: scale(1.05);/*agrandit le titre de 150%*/
     transition: transform 0.3s ease-in-out;/*effet de transition de 0.5s*/
 }

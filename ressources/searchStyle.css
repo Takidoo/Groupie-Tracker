@@ -186,6 +186,7 @@ header h1 {
     border-radius: 5px !important;  /*bordure arrondie*/
     box-sizing: border-box; /*la taille de la boîte inclut les bordures et le remplissage*/
     height: 2.5rem;/*pour que tous les éléments de la barre de recherche est la meme taille*/
+    color: #ffd900 !important;  /*couleur du texte*/
 }
 
 .search-bar select{
@@ -210,9 +211,13 @@ header h1 {
     white-space: nowrap;    /*empeche le retour à la ligne*/
 }
 
-.search-bar button:hover {
-    background-color: #ffd900 !important;   /*couleur de fond*/
-    color: #000 !important; /*couleur du texte*/
+.search-bar button:hover,
+.search-bar [type="text"]:hover,
+.search-bar select:hover {
+    color: #ffd900 !important; /*couleur du texte*/
+    border-color: #53005d !important;   /*couleur de la bordure*/
+    transform: scale(1.05);/*agrandit le titre de 150%*/
+    transition: transform 0.3s ease-in-out;/*effet de transition de 0.5s*/
 }
 
 .search-bar form {      /* Correction pour le formulaire à l'intérieur de la search bar */
@@ -232,7 +237,7 @@ header h1 {
     border-radius: 5px !important;
     box-sizing: border-box;
     height: 2.5rem;
-    color: #ffd900;
+    color: #ffd900 !important;
     flex-shrink: 1; /* Permet une légère réduction */
     width: 90px;  /* Largeur fixe */
     white-space: nowrap;  /* Empêche le retour à la ligne */
@@ -326,7 +331,7 @@ header h1 {
     padding-top:7%;
     font-size: clamp(0.75rem, 2vw, 2rem);
     font-weight: bold;
-    color: #fb2bff;
+    color: #fb2bff !important;
 }
 p{
     font-size: clamp(0.7rem, 1.5vw, 1rem);
