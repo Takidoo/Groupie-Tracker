@@ -21,6 +21,9 @@
                     <option value="3">Creation Date</option>
                     <option value="4">Members</option>
                 </select>
+                <input type="date" id="date1" name="dateStart" required> <!--champ de texte pour rechercher une date de début de concert-->
+                <input type="date" id="date2" name="dateEnd" required>  <!--champ de texte pour rechercher une date de fin de concert-->
+                <input id="dateCheckBox" type="checkbox"> <!--case à cocher pour activer la recherche par date-->
             </form>
         </div>
     </header>
@@ -33,4 +36,12 @@
     {{end}}                                 <!--fin de boucle-->
     </main>
 </body>
+<script>
+    document.getElementById("dateCheckBox").addEventListener("change", function() {  //ajout d'un écouteur d'événement sur la case à cocher pour activer la recherche par date
+        let dateStart = document.getElementById("date1");  //récupération de la date de début
+        let dateEnd = document.getElementById("date2");    //récupération de la date de fin
+            dateStart.disabled = !dateStart.disabled;        //on active la date de début
+            dateEnd.disabled = !dateStart.disabled;          //on active la date de fin
+    });                                                      //fin de l'écouteur d'événement
+</script>
 </html>
